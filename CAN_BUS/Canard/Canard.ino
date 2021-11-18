@@ -93,7 +93,7 @@ void setup(void) {
   Can0.setBaudRate(1000000);
   Can0.setMaxMB(16);
   Can0.enableFIFO();
-  //Can0.enableFIFOInterrupt();
+  Can0.enableFIFOInterrupt();
   Can0.onReceive(canGet);
   Can0.mailboxStatus();
 
@@ -123,8 +123,8 @@ void canGet(const CAN_message_t &msg) {
   //Serial.print("  OVERRUN: "); Serial.print(msg.flags.overrun);
   //  Serial.print("  LEN: "); Serial.print(msg.len);
   //  //Serial.print(" EXT: "); Serial.print(msg.flags.extended);
-  Serial.print(" ID: ");
-  Serial.println(msg.id & CANARD_CAN_EXT_ID_MASK);
+  //  Serial.print(" ID: ");
+  //  Serial.println(msg.id & CANARD_CAN_EXT_ID_MASK);
 
   CanardCANFrame rx_frame {};
   // int * ddd = &Can0;
@@ -139,9 +139,7 @@ void canGet(const CAN_message_t &msg) {
   } else {
     rx_frame.id = msg.id;
   }
-  // canardHandleRxFrame(&canard, &rx_frame, timestamp);
-
-//*int a =   CAN1;
+  canardHandleRxFrame(&canard, &rx_frame, timestamp);
 
   //typedef struct CAN_message_t {
   //  uint32_t id; // can identifier
@@ -188,16 +186,16 @@ void canGet(const CAN_message_t &msg) {
 }
 
 void loop() {
-  CAN_message_t msg;
-  if (Can0.isAvailable())
-  {
-   // Serial.println(Can0.getRXQueueCount());
-    if (Can0.read(msg) > 0)
-    {
-      Serial.print(" ID: ");
-      Serial.println(msg.id & CANARD_CAN_EXT_ID_MASK);
-    }
-  }
-  //Can0.events();
+  //  CAN_message_t msg;
+  //  if (Can0.isAvailable())
+  //  {
+  //   // Serial.println(Can0.getRXQueueCount());
+  //    if (Can0.read(msg) > 0)
+  //    {
+  //      Serial.print(" ID: ");
+  //      Serial.println(msg.id & CANARD_CAN_EXT_ID_MASK);
+  //    }
+  //  }
+  Can0.events();
 
 }

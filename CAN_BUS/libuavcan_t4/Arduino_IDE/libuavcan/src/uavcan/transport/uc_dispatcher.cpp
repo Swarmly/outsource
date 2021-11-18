@@ -1,8 +1,6 @@
 /*
  * Copyright (C) 2014 Pavel Kirienko <pavel.kirienko@gmail.com>
  */
-#include "Arduino.h"
-
 
 #include <uavcan/transport/dispatcher.hpp>
 #include <uavcan/debug.hpp>
@@ -255,7 +253,6 @@ int Dispatcher::spinOnce()
 {
     int num_frames_processed = 0;
 
-//Serial.println("int Dispatcher::spinOnce()");
     while (true)
     {
         CanIOFlags flags = 0;
@@ -269,7 +266,6 @@ int Dispatcher::spinOnce()
         {
             if (flags & CanIOFlagLoopback)
             {
-//Serial.println("int Dispatcher::spinOnce3");
                 handleLoopbackFrame(frame);
             }
             else
@@ -277,7 +273,6 @@ int Dispatcher::spinOnce()
                 num_frames_processed++;
                 handleFrame(frame);
             }
-//Serial.println("int Dispatcher::spinOnce2");
             notifyRxFrameListener(frame, flags);
         }
         else
@@ -290,7 +285,7 @@ int Dispatcher::spinOnce()
 }
 
 int Dispatcher::send(const Frame& frame, MonotonicTime tx_deadline, MonotonicTime blocking_deadline,
-                     CanTxQueue::Qos qos, CanIOFlags flags, uint8_t iface_mask)
+                    CanIOFlags flags, uint8_t iface_mask)
 {
     if (frame.getSrcNodeID() != getNodeID())
     {
@@ -305,7 +300,7 @@ int Dispatcher::send(const Frame& frame, MonotonicTime tx_deadline, MonotonicTim
         UAVCAN_ASSERT(0);
         return -ErrLogic;
     }
-    return canio_.send(can_frame, tx_deadline, blocking_deadline, iface_mask, qos, flags);
+    return canio_.send(can_frame, tx_deadline, blocking_deadline, iface_mask, flags);
 }
 
 void Dispatcher::cleanup(MonotonicTime ts)

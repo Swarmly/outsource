@@ -126,7 +126,7 @@ protected:
         const ServiceCallID id_;
         bool timed_out_;
 
-        virtual void handleDeadline(MonotonicTime) override;
+        virtual void handleDeadline(MonotonicTime);
 
     public:
         CallState(INode& node, ServiceClientBase& owner, ServiceCallID call_id)
@@ -262,13 +262,13 @@ private:
     PublisherType publisher_;
     Callback callback_;
 
-    virtual bool shouldAcceptFrame(const RxFrame& frame) const override; // Called from the transfer listener
+    virtual bool shouldAcceptFrame(const RxFrame& frame) const; // Called from the transfer listener
 
     void invokeCallback(ServiceCallResultType& result);
 
-    virtual void handleReceivedDataStruct(ReceivedDataStructure<ResponseType>& response) override;
+    virtual void handleReceivedDataStruct(ReceivedDataStructure<ResponseType>& response);
 
-    virtual void handleDeadline(MonotonicTime) override;
+    virtual void handleDeadline(MonotonicTime);
 
     int addCallState(ServiceCallID call_id);
 

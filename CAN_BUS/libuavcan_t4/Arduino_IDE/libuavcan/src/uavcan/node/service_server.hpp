@@ -104,7 +104,7 @@ private:
     Callback callback_;
     uint32_t response_failure_count_;
 
-    virtual void handleReceivedDataStruct(ReceivedDataStructure<RequestType>& request) override
+    virtual void handleReceivedDataStruct(ReceivedDataStructure<RequestType>& request)
     {
         UAVCAN_ASSERT(request.getTransferType() == TransferTypeServiceRequest);
 

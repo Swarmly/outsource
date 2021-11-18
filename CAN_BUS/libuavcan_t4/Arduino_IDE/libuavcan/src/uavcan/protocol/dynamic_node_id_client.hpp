@@ -58,7 +58,7 @@ class UAVCAN_EXPORT DynamicNodeIDClient : private TimerBase
 
     void restartTimer(const Mode mode);
 
-    virtual void handleTimerEvent(const TimerEvent&) override;
+    virtual void handleTimerEvent(const TimerEvent&);
 
     void handleAllocation(const ReceivedDataStructure<protocol::dynamic_node_id::Allocation>& msg);
 
@@ -69,6 +69,9 @@ public:
         : TimerBase(node)
         , dnida_pub_(node)
         , dnida_sub_(node)
+#if UAVCAN_CPP_VERSION >= UAVCAN_CPP11
+        , unique_id_{0}
+#endif
         , size_of_received_unique_id_(0)
     { }
 

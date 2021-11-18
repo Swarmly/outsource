@@ -4,7 +4,6 @@
 
 #ifndef UAVCAN_BUILD_CONFIG_HPP_INCLUDED
 #define UAVCAN_BUILD_CONFIG_HPP_INCLUDED
-#define UAVCAN_CPP_VERSION UAVCAN_CPP11
 
 /**
  * UAVCAN version definition
@@ -26,18 +25,21 @@
  * standard than used by the compiler, in which case this symbol can be overridden manually via
  * compiler flags.
  */
+#define UAVCAN_CPP17    2017
+#define UAVCAN_CPP14    2014
 #define UAVCAN_CPP11    2011
 #define UAVCAN_CPP03    2003
 
-#ifndef UAVCAN_CPP_VERSION
-# if __cplusplus > 201200
-#  error Unsupported C++ standard. You can explicitly set UAVCAN_CPP_VERSION=UAVCAN_CPP11 to silence this error.
-# elif (__cplusplus > 201100) || defined(__GXX_EXPERIMENTAL_CXX0X__)
-#  define UAVCAN_CPP_VERSION    UAVCAN_CPP11
-# else
-#  define UAVCAN_CPP_VERSION    UAVCAN_CPP03
-# endif
-#endif
+//#ifndef UAVCAN_CPP_VERSION
+//# if __cplusplus > 201200
+//#  error Unsupported C++ standard. You can explicitly set UAVCAN_CPP_VERSION=UAVCAN_CPP11 to silence this error.
+//# elif (__cplusplus > 201100) || defined(__GXX_EXPERIMENTAL_CXX0X__)
+//#  define UAVCAN_CPP_VERSION    UAVCAN_CPP11
+//# else
+//#  define UAVCAN_CPP_VERSION    UAVCAN_CPP03
+//# endif
+//#endif
+#define UAVCAN_CPP_VERSION    UAVCAN_CPP11
 
 /**
  * The library uses UAVCAN_NULLPTR instead of UAVCAN_NULLPTR and nullptr in order to allow the use of

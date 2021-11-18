@@ -3,8 +3,6 @@
  * Copyright (C) 2014 Pavel Kirienko <pavel.kirienko@gmail.com>
  * Copyright (C) 2019 Theodoros Ntakouris <zarkopafilis@gmail.com>
  */
-#include "Arduino.h"
-
 #include <cassert>
 #include <functional>
 #include <uavcan/transport/can_io.hpp>

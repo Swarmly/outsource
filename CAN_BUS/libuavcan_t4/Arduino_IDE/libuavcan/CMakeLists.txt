@@ -52,8 +52,9 @@ endforeach()
 # Set flags
 #
 include_directories(
-    ./libuavcan/src/uavcan/
-    ./libuavcan/src/uavcan/dsdlc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/uavcan/
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/uavcan/dsdlc
     )
 
 #

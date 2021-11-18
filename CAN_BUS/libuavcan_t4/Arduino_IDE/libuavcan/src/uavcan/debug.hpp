@@ -5,7 +5,7 @@
 
 #ifndef UAVCAN_DEBUG_HPP_INCLUDED
 #define UAVCAN_DEBUG_HPP_INCLUDED
-
+#include "Arduino.h"
 #include <uavcan/build_config.hpp>
 
 #if UAVCAN_DEBUG
@@ -18,6 +18,7 @@ __attribute__ ((format(printf, 2, 3)))
 # endif
 static void UAVCAN_TRACE(const char* src, const char* fmt, ...)
 {
+    Serial.println(src);
     va_list args;
     (void)std::printf("UAVCAN: %s: ", src);
     va_start(args, fmt);

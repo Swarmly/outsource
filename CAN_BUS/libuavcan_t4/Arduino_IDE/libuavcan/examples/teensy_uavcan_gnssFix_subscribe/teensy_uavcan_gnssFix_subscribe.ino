@@ -71,8 +71,8 @@ void loop() {
   // wait in cycle
 
   uint32_t t = micros();
-  Serial.print("CPU Load: ");
-  Serial.println((float)(t-t_)/100);
+//  Serial.print("CPU Load: ");
+//  Serial.println((float)(t-t_)/100);
   cycleWait(framerate);
   t_ = micros();
 

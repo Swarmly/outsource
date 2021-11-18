@@ -16,7 +16,7 @@ Subscriber<RawCommand> *RawCommand_data_Subscriber;
 void RawCommand_data_callback(const RawCommand& msg)
 {
   // TODO
-  Serial.print("RawCommand Received: ");
+  Serial.println("RawCommand Received: ");
 }
 
 void Fix_data_callback(const Fix& msg)

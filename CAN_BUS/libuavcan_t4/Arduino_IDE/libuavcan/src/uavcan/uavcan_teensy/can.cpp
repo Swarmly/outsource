@@ -20,14 +20,12 @@ CanDriver CanDriver::self;
 // initialize can driver
 void CanIface::init(const IfaceParams& p)
 {
-Serial.println("111");
   can1_impl.begin();
   can1_impl.setBaudRate(1000000);
   can1_impl.setMaxMB(16);
   can1_impl.enableFIFO();
  // can1_impl.enableFIFOInterrupt();
 //can1_impl.onReceive(canGet);
-Serial.println("222");
 
   // set mailbox and buffer sizes
 //  flexcan->setTxBufferSize(p.tx_buff_size);
@@ -45,7 +43,6 @@ Serial.println("222");
 // sends a CAN frame
 int16_t CanIface::send(const CanFrame& frame, MonotonicTime tx_deadline, CanIOFlags flags)
 {
-Serial.println("Point1");
   // Frame was not transmitted until tx deadline
   if(!tx_deadline.isZero() && clock::getMonotonic() >= tx_deadline)
   {
@@ -74,22 +71,17 @@ Serial.println("Point2");
 int16_t CanIface::receive(CanFrame& out_frame, MonotonicTime& out_ts_monotonic, UtcTime& out_ts_utc,
                            CanIOFlags& out_flags)
 {
-
-//Serial.println("RC");
   CAN_message_t msg;
 
   if(!flexcan->read(msg))
   {
-//Serial.println("RC0");
     return 0;
   }
 
-//Serial.println("RC2");
   // save timestamp
   out_ts_monotonic = clock::getMonotonic();
   out_ts_utc = UtcTime();               // TODO: change to clock::getUtc() when properly implemented
 
-//Serial.println("RC3");
   out_frame.id = msg.id;
   if(msg.flags.extended)
   {
@@ -142,6 +134,7 @@ uint16_t CanIface::getNumFilters() const
 
 bool CanIface::availableToReadMsg() const
 {
+  //  Serial.println("Point Available check");
 //Serial.print("availableToReadMsg!!!!!!!!!!!!!!! " );
 //Serial.println(flexcan->getRXQueueCount());
   return flexcan->isAvailable() > 0;

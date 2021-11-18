@@ -3,6 +3,7 @@
  * Copyright (C) 2014 Pavel Kirienko <pavel.kirienko@gmail.com>
  * Copyright (C) 2019 Theodoros Ntakouris <zarkopafilis@gmail.com>
  */
+#include "Arduino.h"
 
 #include <cassert>
 #include <functional>
@@ -412,7 +413,6 @@ int CanIOManager::send(const CanFrame &frame, MonotonicTime tx_deadline, Monoton
 int CanIOManager::receive(CanRxFrame &out_frame, MonotonicTime blocking_deadline, CanIOFlags &out_flags) 
 {
     const uint8_t num_ifaces = getNumIfaces();
-
     while (true) 
     {
         CanSelectMasks masks;
@@ -449,16 +449,22 @@ int CanIOManager::receive(CanRxFrame &out_frame, MonotonicTime blocking_deadline
             if (masks.read & (1 << i)) 
             {
                 ICanIface *const iface = driver_.getIface(i);
+                //Serial.println("CanIOManager 1");
+
                 if (iface == UAVCAN_NULLPTR) 
                 {
-                    UAVCAN_ASSERT(0);   // Nonexistent interface
+                    //Serial.println("CanIOManager 2");
+
+                    //UAVCAN_ASSERT(0);   // Nonexistent interface
                     continue;
                 }
 
                 const int res = iface->receive(out_frame, out_frame.ts_mono, out_frame.ts_utc, out_flags);
                 if (res == 0) 
                 {
-                    UAVCAN_ASSERT(0);   // select() reported that iface has pending RX frames, but receive() returned none
+                   // Serial.println("CanIOManager 3");
+
+                    //UAVCAN_ASSERT(0);   // select() reported that iface has pending RX frames, but receive() returned none
                     continue;
                 }
                 out_frame.iface_index = i;

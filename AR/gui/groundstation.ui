@@ -16,36 +16,27 @@
   <property name="windowTitle">
    <string>HERMES</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_4">
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
-    <widget class="QTabWidget" name="tabWidget">
-     <property name="currentIndex">
-      <number>1</number>
+    <widget class="VdWidget" name="videoWidget" native="true">
+     <property name="focusPolicy">
+      <enum>Qt::StrongFocus</enum>
      </property>
-     <widget class="QWidget" name="tab">
-      <attribute name="title">
-       <string>Tab 1</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="VdWidget" name="videoWidget" native="true">
-         <property name="focusPolicy">
-          <enum>Qt::StrongFocus</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_2">
-      <attribute name="title">
-       <string>Tab 2</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="H3DDemo" name="widget_2" native="true"/>
-       </item>
-      </layout>
-     </widget>
     </widget>
    </item>
    <item row="0" column="1">
@@ -273,7 +264,7 @@
        </widget>
       </item>
       <item row="6" column="0">
-       <widget class="QPushButton" name="pushButtonRetract">
+       <widget class="QPushButton" name="pushButtonRender">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -290,7 +281,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>Retract</string>
+         <string>RENDER TYPE</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -333,12 +324,6 @@
    <class>VdWidget</class>
    <extends>QWidget</extends>
    <header location="global">vdwidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>H3DDemo</class>
-   <extends>QWidget</extends>
-   <header location="global">h3ddemo.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

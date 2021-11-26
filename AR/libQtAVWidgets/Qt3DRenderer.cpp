@@ -22,6 +22,8 @@
 #include "QtAVWidgets/Qt3DRenderer.h"
 #include "QtAV/private/OpenGLRendererBase_p.h"
 
+bool renderType = false;
+
 namespace QtAV {
 
 class Qt3DRendererPrivate : public OpenGLRendererBasePrivate
@@ -292,7 +294,7 @@ void Qt3DRenderer::paintGL()
     transform->setRotationX(transform->rotationX() + 1);
     onPaintGL();
     //Change something there
-    if (false)
+    if (renderType)
     {
         DPTR_D(Qt3DRenderer);
 
@@ -315,10 +317,7 @@ void Qt3DRenderer::paintGL()
         }
         d.m_shaderProgram->release();
         // onPaintGL();
-    } else {
-        onPaintGL();
     }
-    //Qt3DWidget::paintGL();
 }
 
 void Qt3DRenderer::resizeGL(int w, int h)

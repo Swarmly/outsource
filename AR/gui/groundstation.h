@@ -53,6 +53,8 @@ private slots:
     void on_pushButtonView_clicked();
     void on_pushRollDerot_clicked(bool checked);
 
+    void on_pushButtonRender_clicked(bool checked);
+
 private:
     QTimer m_timer;
     Ui::GroundStation *ui;

@@ -70,6 +70,8 @@
 #include <QtGui/QResizeEvent>
 #include <QtGui/QScreen>
 
+extern bool renderType;
+
 namespace QtAV {
 // do not define QOpenGLWidget here with ifdef to avoid moc error
 class Qt3DRendererPrivate;

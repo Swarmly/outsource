@@ -18,6 +18,8 @@
 #include <QThread>
 #include <QTimer>
 
+extern bool renderType;
+
 QString GetHASH()
 {
     return define2string(GIT_COMMIT);
@@ -41,13 +43,13 @@ GroundStation::GroundStation(QWidget *parent)
     m_timer.setInterval(500);
     m_timer.start();
 
-//    if (hideQuick) {
-//        ui->widget->setHidden(hideQuick);
-//    }
+    //    if (hideQuick) {
+    //        ui->widget->setHidden(hideQuick);
+    //    }
 
     memset(&m_ground_crossing_report, 0, sizeof(m_ground_crossing_report));
     LOCAL_ASSERT(
-        connect(this, &GroundStation::commandSend, Hermes::getImpl(), &Hermes::commandReSend));
+                connect(this, &GroundStation::commandSend, Hermes::getImpl(), &Hermes::commandReSend));
     LOCAL_ASSERT(connect(Hermes::getImpl(), &Hermes::dataFrame, this, &GroundStation::onDataFrame));
 }
 
@@ -72,7 +74,7 @@ void GroundStation::closeEvent(QCloseEvent * /*event*/)
 void GroundStation::keyPressEvent(QKeyEvent *event)
 {
     if ((event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
-        && event->modifiers() == Qt::AltModifier) {
+            && event->modifiers() == Qt::AltModifier) {
         changeSize();
     }
 
@@ -186,8 +188,8 @@ void GroundStation::onDataFrame(const DataSampleCSPtr &frame)
     if (frame->format() == typeMAV2) {
         if (frame->metaInfo().hasProp("mavlink_nv_ext_ground_crossing_report_t")) {
             m_ground_crossing_report = frame->metaInfo()
-                                           .getProp("mavlink_nv_ext_ground_crossing_report_t",
-                                                    m_ground_crossing_report);
+                    .getProp("mavlink_nv_ext_ground_crossing_report_t",
+                             m_ground_crossing_report);
         }
     }
 }
@@ -210,7 +212,7 @@ void GroundStation::on_pushButtonSyncVD_clicked()
 {
     RestoreVideo rstDlg(ui->pushButtonSyncVD);
     LOCAL_ASSERT(
-        connect(&rstDlg, &RestoreVideo::commandSend, Hermes::getImpl(), &Hermes::commandReSend));
+                connect(&rstDlg, &RestoreVideo::commandSend, Hermes::getImpl(), &Hermes::commandReSend));
     rstDlg.exec();
 }
 
@@ -218,7 +220,7 @@ void GroundStation::on_pushButtonView_clicked()
 {
     GimbalView dialog(ui->pushButtonView);
     LOCAL_ASSERT(
-        connect(&dialog, &GimbalView::commandSend, Hermes::getImpl(), &Hermes::commandReSend));
+                connect(&dialog, &GimbalView::commandSend, Hermes::getImpl(), &Hermes::commandReSend));
     dialog.exec();
 }
 
@@ -226,3 +228,9 @@ void GroundStation::on_pushRollDerot_clicked(bool checked)
 {
     emit commandSend(cmd_gimbal_ROLL_DEROT, checked);
 }
+
+void GroundStation::on_pushButtonRender_clicked(bool checked)
+{
+    renderType = checked;
+}
+

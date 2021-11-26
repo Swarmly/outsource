@@ -291,7 +291,8 @@ void Qt3DRenderer::paintGL()
     //OpenGLRendererBasePrivate &ptrOpenGlBase = dptr.pri<OpenGLRendererBasePrivate>();
     transform->setRotationX(transform->rotationX() + 1);
     onPaintGL();
-    if (true)
+    //Change something there
+    if (false)
     {
         DPTR_D(Qt3DRenderer);
 

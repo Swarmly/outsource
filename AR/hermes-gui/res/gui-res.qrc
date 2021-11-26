@@ -12,5 +12,6 @@
         <file>selected.ico</file>
         <file>selected.png</file>
         <file>selected2.ico</file>
+        <file>3d/toyplane.obj</file>
     </qresource>
 </RCC>

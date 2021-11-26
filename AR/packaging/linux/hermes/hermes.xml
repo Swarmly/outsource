@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+    <mime-type type="application/json">
+        <comment>JSON Config File (Hermes)</comment>
+        <glob pattern="*.json"/>
+    </mime-type>
+    <mime-type type="video/mp2t">
+        <comment>TS Video File (Hermes)</comment>
+        <glob pattern="*.ts"/>
+    </mime-type>
+</mime-info>

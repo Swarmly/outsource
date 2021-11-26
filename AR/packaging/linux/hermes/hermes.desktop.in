@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=Hermes
+Version=1.0
+GenericName=Ground Control Station
+Comment=UAS Ground Control Station
+# %u - a single URL. Local files may either be passed as file: URLs or as file path.
+Exec=@GTU_INSTALL_BINDIR@/gcs %u
+TryExec=@GTU_INSTALL_BINDIR@/gcs
+Icon=hermes
+Terminal=false
+Type=Application
+Categories=Video;AudioVideo;Recorder;Player;AudioVideoEditing;
+MimeType=video/mp2t;application/json;x-scheme-handler/rtmp;x-scheme-handler/rtp;x-scheme-handler/rtsp;
+X-KDE-Protocols=ftp,http,https,mms,rtmp,rtsp,sftp,smb
+StartupNotify=true
+Keywords=Player;Capture;Video;Movie;Server;Broadcast;GCS;Mavlink;

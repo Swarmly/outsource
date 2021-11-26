@@ -1,0 +1,110 @@
+{
+        "HM2": {
+                "FULL_SCREEN": false,
+                "SCREEN": 1,
+                "RENDER": "OpenGL"
+        },
+        "GCS": {
+                "SCREEN": 1,
+                "FULL_SCREEN": true,
+                "RENDER": "OpenGL"
+        },
+        "PIPES": [
+                ["filesrc", "customtsdemux", "ffdemux", "ffdecoder", "hermes"],
+                ["customtsdemux", "mavlink2parser", "hermes"],
+                ["customtsdemux", "TXT_FILTER", "hermes"],
+                ["MAV2RF", "TELEM_UAV", "mavlink2parser", "UDP2LOCALHOST"],
+                ["tcpclient", "filesink"],
+                ["TRIP5", "TELEM_UAV"]
+        ],
+        "SENSORS": [{
+                "TYPE": "filesrc",
+                "DEFAULT_FORMAT": "mpegts",
+                "RESTART": false,
+                "PATH": "%FILENAME%"
+        }, {
+                "TYPE": "tcpclient",
+                "NAME": "tcpclient",
+                "DEFAULT_FORMAT": "mpegts",
+                "HOST_DEV": ["192.168.0.203:11024", "192.168.0.100:5600", "192.168.1.100:5600"],
+                "HOST": ["192.168.0.100:5600"]
+        }, {
+                "TYPE": "udpserver",
+                "PORT": 14550,
+                "NAME": "UDP2LOCALHOST",
+                "HOST": "127.0.0.1"
+        }, {
+                "TYPE": "rxpluginnative",
+                "NAME": "rxplugin",
+                "FREQUENCY": 1280000,
+                "BANDWIDTH": 4000
+        }, {
+                "TYPE": "crypto_aes",
+                "NAME": "AES_DECRYPT",
+                "PATH": "/software/gtu/key/key.dat",
+                "AES_256": false,
+                "ENCRYPT": false
+        }, {
+                "TYPE": "mav2rf",
+                "NAME": "MAV2RF",
+                "SYS_ID": 255,
+                "COMP_ID": 31,
+                "TARGET_SYS_ID": 0,
+                "TARGET_COMP_ID": 1
+        }, {
+                "TYPE": "udpserver",
+                "DEFAULT_FORMAT": "bin_data",
+                "NAME": "TELEM_UAV",
+                "ID": 3,
+                "PORT": 14555,
+                "LOCAL_PORT": 14550,
+                "HOST": "192.168.0.255"
+        }, {
+                "TYPE": "udpserver",
+                "DEFAULT_FORMAT": "bin_data",
+                "NAME": "LOCAL_UAV",
+                "ID": 3,
+                "PORT": 14550,
+                "LOCAL_PORT": 14555,
+                "HOST": "192.168.0.255"
+        }, {
+                "TYPE": "trip5",
+                "NAME": "TRIP5",
+                "SYS_ID": 255,
+                "COMP_ID": 30,
+                "TARGET_SYS_ID": 0,
+                "TARGET_COMP_ID": 1
+        }, {
+                "TYPE": "mavlink2parser"
+        }, {
+                "TYPE": "customtsdemux"
+        }, {
+                "TYPE": "empty",
+                "NAME": "TXT_FILTER",
+                "ACCEPTED": {
+                        "txt": "format:txt"
+                }
+        }, {
+                "TYPE": "filesink",
+                "NAME": "filesink",
+                "ARMEDONLY": false,
+                "PATH": "%home%/Videos/Records/videos_%autoinc%_%time%.ts"
+        }, {
+                "TYPE": "avdemux",
+                "NAME": "ffdemux",
+                "FIND_STREAM_INFO": false,
+                "FORMAT": "hevc",
+                "DECODE": false,
+                "RESTART_ON_EOS": true,
+                "DEFAULT_INIT": false,
+                "MAX_BUFFER_SIZE": 30080,
+                "IS_LOCAL_FILE": false,
+                "ACCEPTED": {
+                        "VIDEO": "format:mpegts",
+                        "H264": "format:h264",
+                        "HEVC": "format:hevc"
+                }
+        }, {
+                "TYPE": "ffdecoder"
+        }]
+}

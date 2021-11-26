@@ -1,0 +1,2 @@
+gtu_linux_configure_and_install_desktop_file("close")
+gtu_linux_configure_and_install_desktop_file("sitl")

@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=HMTool
+Version=1.0
+GenericName=Video KLV and Telemtry Tool
+Comment=Video KLV and Telemtry Tool
+Exec=@GTU_INSTALL_BINDIR@/hmtool %f
+TryExec=@GTU_INSTALL_BINDIR@/hmtool
+Icon=hmtool
+Terminal=false
+Type=Application
+Categories=Utility;
+MimeType=video/mp2t;
+StartupNotify=true
+Keywords=Video;GCS;Hermes;Tool;KLV;Telemetry;

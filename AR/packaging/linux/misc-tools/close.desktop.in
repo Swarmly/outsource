@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Close
+Version=1.0
+GenericName=Close
+Comment=Close Hermes, QGroundControl and Arduplane
+Exec=@GTU_INSTALL_SCRIPTDIR@/close.sh
+Icon=close
+Terminal=false
+Type=Application
+Categories=Utility;
+StartupNotify=true
+Keywords=Close; Hermes; QGroundControl; Arduplane;

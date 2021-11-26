@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=SITL
+Version=1.0
+GenericName=SITL
+Comment=SITL
+Exec=@GTU_INSTALL_SCRIPTDIR@/sitl.sh 37.6213,-122.3790,0,0
+Icon=sitl
+Terminal=false
+Type=Application
+Categories=Utility;
+StartupNotify=true
+Keywords=SITL;

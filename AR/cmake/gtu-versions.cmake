@@ -1,0 +1,36 @@
+macro(SETUP_VERSION_VARS)
+    #read version from file
+    if( EXISTS ${CMAKE_SOURCE_DIR}/GTU-VERSION )
+        file(READ  ${CMAKE_SOURCE_DIR}/GTU-VERSION PRJ_VERSION)
+    else()
+        file(READ  ${CMAKE_SOURCE_DIR}/../GTU-VERSION PRJ_VERSION)
+    endif()
+
+    STRING(REGEX REPLACE "\n" "" PRJ_VERSION "${PRJ_VERSION}")
+    string(REPLACE  "."  ";"  VTMP  ${PRJ_VERSION} )
+    list(GET VTMP 0 VERSION_MAJOR)
+    list(GET VTMP 1 VERSION_MINOR)
+    list(GET VTMP 2 VERSION_PATCH)
+    set(GTU_VERSION ${PRJ_VERSION})
+    set(VERSION_STRING ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
+    add_definitions("-DAPP_VERSION=${VERSION_STRING}")
+    message("APP version is: " ${VERSION_STRING})
+endmacro(SETUP_VERSION_VARS)
+
+#
+macro(SETUP_GIT_VARS)
+    execute_process(
+        COMMAND ${GIT_EXECUTABLE} log -1 --format=%h
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        OUTPUT_VARIABLE GIT_COMMIT_HASH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+
+    add_definitions("-DGIT_COMMIT=${GIT_COMMIT_HASH}")
+    message("GIT commit is: " ${GIT_COMMIT_HASH})
+endmacro(SETUP_GIT_VARS)
+
+macro(SETUP_SHARED_LIB_VER TRGT_LIB)
+    set_target_properties(${TRGT_LIB} PROPERTIES VERSION ${VERSION_STRING} SOVERSION ${VERSION_MAJOR})
+    set_target_properties(${TRGT_LIB} PROPERTIES LINKER_LANGUAGE CXX)
+endmacro(SETUP_SHARED_LIB_VER)

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>setMavUavMode</class>
+ <widget class="QWidget" name="setMavUavMode">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>472</width>
+    <height>66</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Threshold:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QSpinBox" name="spinBox">
+     <property name="minimumSize">
+      <size>
+       <width>61</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="minimum">
+      <number>10</number>
+     </property>
+     <property name="maximum">
+      <number>90</number>
+     </property>
+     <property name="value">
+      <number>15</number>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QPushButton" name="pushButtonAuto">
+     <property name="minimumSize">
+      <size>
+       <width>64</width>
+       <height>48</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Auto</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QPushButton" name="pushButton433">
+     <property name="minimumSize">
+      <size>
+       <width>64</width>
+       <height>48</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>433 Only</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QPushButton" name="pushButton866">
+     <property name="minimumSize">
+      <size>
+       <width>64</width>
+       <height>48</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>866 Only</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="5">
+    <widget class="QPushButton" name="pushButtonMixed">
+     <property name="minimumSize">
+      <size>
+       <width>64</width>
+       <height>48</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Mixed</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

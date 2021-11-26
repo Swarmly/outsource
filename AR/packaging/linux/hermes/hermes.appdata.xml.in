@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+    <id>hermes</id>
+    <name>Hermes</name>
+    <developer_name>HERMES Team</developer_name>
+    <summary>Ground Control Station</summary>
+    <description><p>TODO: description</p></description>
+    <url type="homepage">https://www.easy-fpv.com/</url>
+    <content_rating type="oars-1.1"/>
+    <releases>
+        <release version="@APPDATA_RELEASE_VERSION@" date="@APPDATA_RELEASE_DATE@"/>
+    </releases>
+</component>

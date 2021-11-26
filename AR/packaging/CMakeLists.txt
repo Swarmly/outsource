@@ -1,0 +1,5 @@
+if(LINUX)
+    add_subdirectory(linux)
+elseif(WIN32 AND MINGW)
+    add_subdirectory(windows)
+endif()

@@ -19,9 +19,10 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 ******************************************************************************/
 
+#include <QDebug>
+#include <QtAV/FilterContext.h>
 #include <QtAV/QPainterRenderer.h>
 #include <QtAV/private/QPainterRenderer_p.h>
-#include <QtAV/FilterContext.h>
 
 namespace QtAV {
 
@@ -94,36 +95,44 @@ void QPainterRenderer::drawBackground()
 
 void QPainterRenderer::drawFrame()
 {
-    DPTR_D(QPainterRenderer);
-    if (!d.painter)
-        return;
-    if (d.pixmap.isNull())
-        return;
-    QRect roi = realROI();
-    if (d.rotation() == 0) {
-        //assume that the image data is already scaled to out_size(NOT renderer size!)
-        if (roi.size() == d.out_rect.size()) {
-            d.painter->drawPixmap(d.out_rect.topLeft(), d.pixmap, roi);
-        } else {
-            d.painter->drawPixmap(d.out_rect, d.pixmap, roi);
-            //what's the difference?
-            //d.painter->drawPixmap(QPoint(), d.pixmap.scaled(d.renderer_width, d.renderer_height));
+    try {
+        DPTR_D(QPainterRenderer);
+        if (!d.painter)
+            return;
+        if (d.pixmap.isNull())
+            return;
+        QRect roi = realROI();
+        if (d.rotation() == 0) {
+            //assume that the image data is already scaled to out_size(NOT renderer size!)
+            if (roi.size() == d.out_rect.size()) {
+                d.painter->drawPixmap(d.out_rect.topLeft(), d.pixmap, roi);
+            } else {
+                d.painter->drawPixmap(d.out_rect, d.pixmap, roi);
+                //what's the difference?
+                //d.painter->drawPixmap(QPoint(), d.pixmap.scaled(d.renderer_width, d.renderer_height));
+            }
+            return;
         }
-        return;
+        // render to whole renderer rect in painter's transformed coordinate
+        // scale ratio is different from gl based renderers. gl always fill the whole rect
+        d.painter->save();
+        d.painter->translate(rendererWidth() / 2, rendererHeight() / 2);
+        // TODO: why rotate then scale gives wrong result?
+        if (d.rotation() % 180)
+            d.painter->scale((qreal) d.out_rect.width() / (qreal) rendererHeight(),
+                             (qreal) d.out_rect.height() / (qreal) rendererWidth());
+        else
+            d.painter->scale((qreal) d.out_rect.width() / (qreal) rendererWidth(),
+                             (qreal) d.out_rect.height() / (qreal) rendererHeight());
+        d.painter->rotate(d.rotation());
+        d.painter->translate(-rendererWidth() / 2, -rendererHeight() / 2);
+        d.painter->drawPixmap(QRect(0, 0, rendererWidth(), rendererHeight()), d.pixmap, roi);
+        d.painter->restore();
+    } catch (std::exception &e) {
+        qCritical() << "Exception catched in QTAV: " << __FUNCTION__ << e.what();
+    } catch (...) {
+        qCritical() << "UNKNOWN Exception catched in QTAV: " << __FUNCTION__;
     }
-    // render to whole renderer rect in painter's transformed coordinate
-    // scale ratio is different from gl based renderers. gl always fill the whole rect
-    d.painter->save();
-    d.painter->translate(rendererWidth()/2, rendererHeight()/2);
-    // TODO: why rotate then scale gives wrong result?
-    if (d.rotation() % 180)
-        d.painter->scale((qreal)d.out_rect.width()/(qreal)rendererHeight(), (qreal)d.out_rect.height()/(qreal)rendererWidth());
-    else
-        d.painter->scale((qreal)d.out_rect.width()/(qreal)rendererWidth(), (qreal)d.out_rect.height()/(qreal)rendererHeight());
-    d.painter->rotate(d.rotation());
-    d.painter->translate(-rendererWidth()/2, -rendererHeight()/2);
-    d.painter->drawPixmap(QRect(0, 0, rendererWidth(), rendererHeight()), d.pixmap, roi);
-    d.painter->restore();
 }
 
 } //namespace QtAV

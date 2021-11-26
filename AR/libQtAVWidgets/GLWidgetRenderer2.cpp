@@ -64,18 +64,24 @@ void GLWidgetRenderer2::initializeGL()
 
 void GLWidgetRenderer2::paintGL()
 {
-    DPTR_D(GLWidgetRenderer2);
-    /* we can mix gl and qpainter.
+    try {
+        DPTR_D(GLWidgetRenderer2);
+        /* we can mix gl and qpainter.
      * QPainter painter(this);
      * painter.beginNativePainting();
      * gl functions...
      * painter.endNativePainting();
      * swapBuffers();
      */
-    handlePaintEvent();
-    swapBuffers();
-    if (d.painter && d.painter->isActive())
-        d.painter->end();
+        handlePaintEvent();
+        swapBuffers();
+        if (d.painter && d.painter->isActive())
+            d.painter->end();
+    } catch (std::exception &e) {
+        qCritical() << "Exception catched in QTAV: " << __FUNCTION__ << e.what();
+    } catch (...) {
+        qCritical() << "UNKNOWN Exception catched in QTAV: " << __FUNCTION__;
+    }
 }
 
 void GLWidgetRenderer2::resizeGL(int w, int h)

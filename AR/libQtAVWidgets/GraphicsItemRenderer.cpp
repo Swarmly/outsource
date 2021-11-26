@@ -170,29 +170,35 @@ OpenGLVideo* GraphicsItemRenderer::opengl() const
 
 void GraphicsItemRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-	Q_UNUSED(option);
-	Q_UNUSED(widget);
-    DPTR_D(GraphicsItemRenderer);
-    d.painter = painter;
-    QPainterFilterContext *ctx = static_cast<QPainterFilterContext*>(d.filter_context);
-    if (ctx) {
-        ctx->painter = d.painter;
-    } else {
-        qWarning("FilterContext not available!");
+    try {
+        Q_UNUSED(option);
+        Q_UNUSED(widget);
+        DPTR_D(GraphicsItemRenderer);
+        d.painter = painter;
+        QPainterFilterContext *ctx = static_cast<QPainterFilterContext *>(d.filter_context);
+        if (ctx) {
+            ctx->painter = d.painter;
+        } else {
+            qWarning("FilterContext not available!");
+        }
+        // save painter state, switch to native opengl painting
+        painter->save();
+        painter->beginNativePainting();
+
+        handlePaintEvent();
+
+        // end native painting, restore state
+        painter->endNativePainting();
+        painter->restore();
+
+        d.painter = 0; //painter may be not available outside this function
+        if (ctx)
+            ctx->painter = 0;
+    } catch (std::exception &e) {
+        qCritical() << "Exception catched in QTAV: " << __FUNCTION__ << e.what();
+    } catch (...) {
+        qCritical() << "UNKNOWN Exception catched in QTAV: " << __FUNCTION__;
     }
-    // save painter state, switch to native opengl painting
-	painter->save();
-    painter->beginNativePainting();
-	
-    handlePaintEvent();
-	
-	// end native painting, restore state
-    painter->endNativePainting();
-    painter->restore();
-	
-    d.painter = 0; //painter may be not available outside this function
-    if (ctx)
-        ctx->painter = 0;
 }
 
 void GraphicsItemRenderer::drawBackground()

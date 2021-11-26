@@ -80,6 +80,7 @@ class Q_AV_EXPORT VideoFilter : public Filter
     DPTR_DECLARE_PRIVATE(VideoFilter)
 public:
     VideoFilter(QObject* parent = 0);
+    ~VideoFilter();
 
     VideoFilterContext* context();
     virtual bool isSupported(VideoFilterContext::Type ct) const;

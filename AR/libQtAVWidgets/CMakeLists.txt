@@ -30,6 +30,14 @@ set(SOURCES
         VideoPreviewWidget.cpp
         WidgetRenderer.cpp
         )
+
+if (HAVE_3D)
+        list(APPEND SDK_HEADERS QtAVWidgets/Qt3DRenderer.h)
+        list(APPEND SOURCES Qt3DRenderer.cpp)
+else(HAVE_3D)
+        message (STATUS "Not found Qt3D engine!!!!")
+endif()
+
 if(HAVE_QT5OPENGL)
   list(APPEND SDK_HEADERS QtAVWidgets/GLWidgetRenderer2.h)
   list(APPEND SOURCES GLWidgetRenderer2.cpp)

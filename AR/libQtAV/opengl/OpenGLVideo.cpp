@@ -129,8 +129,8 @@ void OpenGLVideoPrivate::updateGeometry(VideoShader* shader, const QRectF &t, co
         GeometryRenderer *r = new GeometryRenderer(); // local var is captured by lambda 
         gr = r;
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0) && defined(Q_COMPILER_LAMBDA)
-        QObject::connect(QOpenGLContext::currentContext(), &QOpenGLContext::aboutToBeDestroyed, [r]{
-            qDebug("destroy GeometryRenderer %p", r);
+        QObject::connect(QOpenGLContext::currentContext(), &QOpenGLContext::aboutToBeDestroyed, [r] {
+            QTAV_LOG_DEBUG("destroy GeometryRenderer %p", r);
             delete r;
         });
 #endif
@@ -156,9 +156,9 @@ void OpenGLVideoPrivate::updateGeometry(VideoShader* shader, const QRectF &t, co
         geometry = new Sphere();
     else
         geometry = new TexturedGeometry();
-    //qDebug("updating geometry...");
+    //QTAV_LOG_DEBUG("updating geometry...");
     // setTextureCount may change the vertex data. Call it before setRect()
-    qDebug() << "target rect: " << target_rect ;
+    //QTAV_LOG_DEBUG() << "target rect: " << target_rect;
     geometry->setTextureCount(shader->textureTarget() == GL_TEXTURE_RECTANGLE ? tc : 1);
     geometry->setGeometryRect(target_rect);
     geometry->setTextureRect(material->mapToTexture(0, roi));
@@ -226,28 +226,32 @@ void OpenGLVideo::setOpenGLContext(QOpenGLContext *ctx)
     /// get gl info here because context is current(qt ensure it)
     //const QByteArray extensions(reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS)));
     bool hasGLSL = QOpenGLShaderProgram::hasOpenGLShaderPrograms();
-    qDebug("OpenGL version: %d.%d  hasGLSL: %d", ctx->format().majorVersion(), ctx->format().minorVersion(), hasGLSL);
+    QTAV_LOG_DEBUG("OpenGL version: %d.%d  hasGLSL: %d",
+                   ctx->format().majorVersion(),
+                   ctx->format().minorVersion(),
+                   hasGLSL);
     static bool sInfo = true;
     if (sInfo) {
         sInfo = false;
-        qDebug("GL_VERSION: %s", DYGL(glGetString(GL_VERSION)));
-        qDebug("GL_VENDOR: %s", DYGL(glGetString(GL_VENDOR)));
-        qDebug("GL_RENDERER: %s", DYGL(glGetString(GL_RENDERER)));
-        qDebug("GL_SHADING_LANGUAGE_VERSION: %s", DYGL(glGetString(GL_SHADING_LANGUAGE_VERSION)));
+        QTAV_LOG_DEBUG("GL_VERSION: %s", DYGL(glGetString(GL_VERSION)));
+        QTAV_LOG_DEBUG("GL_VENDOR: %s", DYGL(glGetString(GL_VENDOR)));
+        QTAV_LOG_DEBUG("GL_RENDERER: %s", DYGL(glGetString(GL_RENDERER)));
+        QTAV_LOG_DEBUG("GL_SHADING_LANGUAGE_VERSION: %s",
+                       DYGL(glGetString(GL_SHADING_LANGUAGE_VERSION)));
         /// check here with current context can ensure the right result. If the first check is in VideoShader/VideoMaterial/decoder or somewhere else, the context can be null
         bool v = OpenGLHelper::isOpenGLES();
-        qDebug("Is OpenGLES: %d", v);
+        QTAV_LOG_DEBUG("Is OpenGLES: %d", v);
         v = OpenGLHelper::isEGL();
-        qDebug("Is EGL: %d", v);
+        QTAV_LOG_DEBUG("Is EGL: %d", v);
         const int glsl_ver = OpenGLHelper::GLSLVersion();
-        qDebug("GLSL version: %d", glsl_ver);
+        QTAV_LOG_DEBUG("GLSL version: %d", glsl_ver);
         v = OpenGLHelper::isPBOSupported();
-        qDebug("Has PBO: %d", v);
+        QTAV_LOG_DEBUG("Has PBO: %d", v);
         v = OpenGLHelper::has16BitTexture();
-        qDebug("Has 16bit texture: %d", v);
+        QTAV_LOG_DEBUG("Has 16bit texture: %d", v);
         v = OpenGLHelper::hasRG();
-        qDebug("Has RG texture: %d", v);
-        qDebug() << ctx->format();
+        QTAV_LOG_DEBUG("Has RG texture: %d", v);
+        //QTAV_LOG_DEBUG() << ctx->format();
     }
 }
 
@@ -348,7 +352,8 @@ void OpenGLVideo::render(const QRectF &target, const QRectF& roi, const QMatrix4
     Q_EMIT beforeRendering();
     const qint64 mt = d.material->type();
     if (d.material_type != mt) {
-        qDebug() << "material changed: " << VideoMaterial::typeName(d.material_type) << " => " << VideoMaterial::typeName(mt);
+        //QTAV_LOG_DEBUG() << "material changed: " << VideoMaterial::typeName(d.material_type)
+        //                 << " => " << VideoMaterial::typeName(mt);
         d.material_type = mt;
     }
     if (!d.material->bind()) // bind first because texture parameters(target) mapped from native buffer is unknown before it
@@ -380,7 +385,7 @@ void OpenGLVideo::render(const QRectF &target, const QRectF& roi, const QMatrix4
 
 void OpenGLVideo::resetGL()
 {
-    qDebug("~~~~~~~~~resetGL %p. from sender %p", d_func().manager, sender());
+    QTAV_LOG_DEBUG("~~~~~~~~~resetGL %p. from sender %p", d_func().manager, sender());
     d_func().resetGL();
 }
 

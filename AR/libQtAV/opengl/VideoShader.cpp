@@ -117,7 +117,7 @@ const char* VideoShader::vertexShader() const
 #ifdef QTAV_DEBUG_GLSL
     QString s(vert);
     s = OpenGLHelper::removeComments(s);
-    qDebug() << s.toUtf8().constData();
+    QTAV_LOG_DEBUG() << s.toUtf8().constData();
 #endif //QTAV_DEBUG_GLSL
     return vert.constData();
 }
@@ -197,7 +197,7 @@ const char* VideoShader::fragmentShader() const
 #ifdef QTAV_DEBUG_GLSL
     QString s(frag);
     s = OpenGLHelper::removeComments(s);
-    qDebug() << s.toUtf8().constData();
+    QTAV_LOG_DEBUG() << s.toUtf8().constData();
 #endif //QTAV_DEBUG_GLSL
     return frag.constData();
 }
@@ -224,32 +224,32 @@ void VideoShader::initialize(QOpenGLShaderProgram *shaderProgram)
     d.u_texelSize = shaderProgram->uniformLocation("u_texelSize");
     d.u_textureSize = shaderProgram->uniformLocation("u_textureSize");
     d.u_Texture.resize(textureLocationCount());
-    qDebug("uniform locations:");
+    QTAV_LOG_DEBUG("uniform locations:");
     for (int i = 0; i < d.u_Texture.size(); ++i) {
         const QString tex_var = QStringLiteral("u_Texture%1").arg(i);
         d.u_Texture[i] = shaderProgram->uniformLocation(tex_var);
-        qDebug("%s: %d", tex_var.toUtf8().constData(), d.u_Texture[i]);
+        QTAV_LOG_DEBUG("%s: %d", tex_var.toUtf8().constData(), d.u_Texture[i]);
     }
-    qDebug("u_Matrix: %d", d.u_Matrix);
-    qDebug("u_colorMatrix: %d", d.u_colorMatrix);
-    qDebug("u_opacity: %d", d.u_opacity);
+    QTAV_LOG_DEBUG("u_Matrix: %d", d.u_Matrix);
+    QTAV_LOG_DEBUG("u_colorMatrix: %d", d.u_colorMatrix);
+    QTAV_LOG_DEBUG("u_opacity: %d", d.u_opacity);
     if (d.u_c >= 0)
-        qDebug("u_c: %d", d.u_c);
+        QTAV_LOG_DEBUG("u_c: %d", d.u_c);
     if (d.u_to8 >= 0)
-        qDebug("u_to8: %d", d.u_to8);
+        QTAV_LOG_DEBUG("u_to8: %d", d.u_to8);
     if (d.u_texelSize >= 0)
-        qDebug("u_texelSize: %d", d.u_texelSize);
+        QTAV_LOG_DEBUG("u_texelSize: %d", d.u_texelSize);
     if (d.u_textureSize >= 0)
-        qDebug("u_textureSize: %d", d.u_textureSize);
+        QTAV_LOG_DEBUG("u_textureSize: %d", d.u_textureSize);
 
     d.user_uniforms[VertexShader].clear();
     d.user_uniforms[FragmentShader].clear();
     if (userShaderHeader(QOpenGLShader::Vertex)) {
-        qDebug("user uniform locations in vertex shader:");
+        QTAV_LOG_DEBUG("user uniform locations in vertex shader:");
         d.user_uniforms[VertexShader] = ParseUniforms(QByteArray(userShaderHeader(QOpenGLShader::Vertex)), shaderProgram->programId());
     }
     if (userShaderHeader(QOpenGLShader::Fragment)) {
-        qDebug("user uniform locations in fragment shader:");
+        QTAV_LOG_DEBUG("user uniform locations in fragment shader:");
         d.user_uniforms[FragmentShader] = ParseUniforms(QByteArray(userShaderHeader(QOpenGLShader::Fragment)), shaderProgram->programId());
     }
     d.rebuild_program = false;
@@ -353,7 +353,10 @@ bool VideoShader::update(VideoMaterial *material)
     const qint32 mt = material->type();
     if (mt != d.material_type || d.rebuild_program) {
         // TODO: use shader program cache (per shader), check shader type
-        qDebug("Rebuild shader program requested: %d. Material type %d=>%d", d.rebuild_program, d.material_type, mt);
+        QTAV_LOG_DEBUG("Rebuild shader program requested: %d. Material type %d=>%d",
+                       d.rebuild_program,
+                       d.material_type,
+                       mt);
         program()->removeAllShaders(); //not linked
         // initialize shader, the same as VideoMaterial::createShader
         setVideoFormat(material->currentFormat());
@@ -454,7 +457,7 @@ bool VideoShader::build(QOpenGLShaderProgram *shaderProgram)
         // why must min location == 0?
         if (*attr[i]) {
             shaderProgram->bindAttributeLocation(attr[i], i);
-            qDebug("bind attribute: %s => %d", attr[i], i);
+            QTAV_LOG_DEBUG("bind attribute: %s => %d", attr[i], i);
         }
     }
 
@@ -487,7 +490,7 @@ void VideoMaterial::setCurrentFrame(const VideoFrame &frame)
     if (t == QByteArrayLiteral("rect"))
         new_target = GL_TEXTURE_RECTANGLE;
     if (new_target != d.target) {
-        qDebug("texture target: %#x=>%#x", d.target, new_target);
+        QTAV_LOG_DEBUG("texture target: %#x=>%#x", d.target, new_target);
         // FIXME: not thread safe (in qml)
         d.target = new_target;
         d.init_textures_required = true;
@@ -542,8 +545,11 @@ void VideoMaterial::setCurrentFrame(const VideoFrame &frame)
     d.colorTransform.setOutputColorRange(kRgbDispRange);
     d.frame = frame;
     if (fmt != d.video_format) {
-        qDebug() << fmt;
-        qDebug("pixel format changed: %s => %s %d", qPrintable(d.video_format.name()), qPrintable(fmt.name()), fmt.pixelFormat());
+        //QTAV_LOG_DEBUG() << fmt;
+        QTAV_LOG_DEBUG("pixel format changed: %s => %s %d",
+                       qPrintable(d.video_format.name()),
+                       qPrintable(fmt.name()),
+                       fmt.pixelFormat());
         d.video_format = fmt;
         d.init_textures_required = true;
     }
@@ -642,7 +648,7 @@ void VideoMaterialPrivate::uploadPlane(int p, bool updateTexture)
     if (frame.bytesPerLine(p) <= 0)
         return;
     if (try_pbo) {
-        //qDebug("bind PBO %d", p);
+        //QTAV_LOG_DEBUG("bind PBO %d", p);
         QOpenGLBuffer &pb = pbo[p];
         pb.bind();
         // glMapBuffer() causes sync issue.
@@ -656,7 +662,7 @@ void VideoMaterialPrivate::uploadPlane(int p, bool updateTexture)
             pb.unmap();
         }
     }
-    //qDebug("bpl[%d]=%d width=%d", p, frame.bytesPerLine(p), frame.planeWidth(p));
+    //QTAV_LOG_DEBUG("bpl[%d]=%d width=%d", p, frame.bytesPerLine(p), frame.planeWidth(p));
     DYGL(glBindTexture(target, tex));
     //setupQuality();
     //DYGL(glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
@@ -919,7 +925,7 @@ bool VideoMaterialPrivate::initPBO(int plane, int size)
 {
     QOpenGLBuffer &pb = pbo[plane];
     if (!pb.isCreated()) {
-        qDebug("Creating PBO for plane %d, size: %d...", plane, size);
+        QTAV_LOG_DEBUG("Creating PBO for plane %d, size: %d...", plane, size);
         pb.create();
     }
     if (!pb.bind()) {
@@ -928,7 +934,7 @@ bool VideoMaterialPrivate::initPBO(int plane, int size)
         return false;
     }
     //pb.setUsagePattern(QOpenGLBuffer::DynamicCopy);
-    qDebug("Allocate PBO size %d", size);
+    QTAV_LOG_DEBUG("Allocate PBO size %d", size);
     pb.allocate(size);
     pb.release(); //bind to 0
     return true;
@@ -986,10 +992,10 @@ bool VideoMaterialPrivate::updateTextureParameters(const VideoFormat& fmt)
         qWarning() << "No OpenGL support for " << fmt;
         return false;
     }
-    qDebug() << "texture internal format: " << internal_format;
-    qDebug() << "texture data format: " << data_format;
-    qDebug() << "texture data type: " << data_type;
-    qDebug("///////////bpp %d, bpc: %d", fmt.bytesPerPixel(), fmt.bitsPerComponent());
+    //    QTAV_LOG_DEBUG() << "texture internal format: " << internal_format;
+    //    QTAV_LOG_DEBUG() << "texture data format: " << data_format;
+    //    QTAV_LOG_DEBUG() << "texture data type: " << data_type;
+    QTAV_LOG_DEBUG("///////////bpp %d, bpc: %d", fmt.bytesPerPixel(), fmt.bitsPerComponent());
     for (int i = 0; i < nb_planes; ++i) {
         const int bpp_gl = OpenGLHelper::bytesOfGLFormat(data_format[i], data_type[i]);
         const int pad = std::ceil((qreal)(texture_size[i].width() - effective_tex_width[i])/(qreal)bpp_gl);
@@ -997,7 +1003,11 @@ bool VideoMaterialPrivate::updateTextureParameters(const VideoFormat& fmt)
         effective_tex_width[i] /= bpp_gl; //fmt.bytesPerPixel(i);
         v_texture_size[i] = QVector2D(texture_size[i].width(), texture_size[i].height());
         //effective_tex_width_ratio =
-        qDebug("texture width: %d - %d = pad: %d. bpp(gl): %d", texture_size[i].width(), effective_tex_width[i], pad, bpp_gl);
+        QTAV_LOG_DEBUG("texture width: %d - %d = pad: %d. bpp(gl): %d",
+                       texture_size[i].width(),
+                       effective_tex_width[i],
+                       pad,
+                       bpp_gl);
         if (target == GL_TEXTURE_RECTANGLE)
             v_texel_size[i] = QVector2D(1.0, 1.0);
         else
@@ -1015,11 +1025,14 @@ bool VideoMaterialPrivate::updateTextureParameters(const VideoFormat& fmt)
     // always delete old textures otherwise old textures are not initialized with correct parameters
     if (textures.size() > nb_planes) { //TODO: why check this?
         const int nb_delete = textures.size() - nb_planes;
-        qDebug("try to delete %d textures", nb_delete);
+        QTAV_LOG_DEBUG("try to delete %d textures", nb_delete);
         if (!textures.isEmpty()) {
             for (int i = 0; i < nb_delete; ++i) {
                 GLuint &t = textures[nb_planes+i];
-                qDebug("try to delete texture[%d]: %u. can delete: %d", nb_planes+i, t, owns_texture[t]);
+                QTAV_LOG_DEBUG("try to delete texture[%d]: %u. can delete: %d",
+                               nb_planes + i,
+                               t,
+                               owns_texture[t]);
                 if (owns_texture[t])
                     DYGL(glDeleteTextures(1, &t));
             }
@@ -1063,7 +1076,13 @@ bool VideoMaterialPrivate::ensureResources()
         effective_tex_width.resize(nb_planes);
         effective_tex_width_ratio = 1.0;
         for (int i = 0; i < nb_planes; ++i) {
-            qDebug("plane linesize %d: padded = %d, effective = %d. theoretical plane size: %dx%d", i, frame.bytesPerLine(i), frame.effectiveBytesPerLine(i), frame.planeWidth(i), frame.planeHeight(i));
+            QTAV_LOG_DEBUG(
+                "plane linesize %d: padded = %d, effective = %d. theoretical plane size: %dx%d",
+                i,
+                frame.bytesPerLine(i),
+                frame.effectiveBytesPerLine(i),
+                frame.planeWidth(i),
+                frame.planeHeight(i));
             // we have to consider size of opengl format. set bytesPerLine here and change to width later
             texture_size[i] = QSize(frame.bytesPerLine(i), frame.planeHeight(i));
             effective_tex_width[i] = frame.effectiveBytesPerLine(i); //store bytes here, modify as width later
@@ -1080,7 +1099,7 @@ bool VideoMaterialPrivate::ensureResources()
           e.g. original frame plane 0: 720/768; plane 1,2: 360/384,
           filtered frame plane 0: 720/736, ... (16 aligned?)
          */
-        qDebug("effective_tex_width_ratio=%f", effective_tex_width_ratio);
+        QTAV_LOG_DEBUG("effective_tex_width_ratio=%f", effective_tex_width_ratio);
         plane0Size.setWidth(linsize0);
         plane0Size.setHeight(frame.height());
     }
@@ -1092,10 +1111,10 @@ bool VideoMaterialPrivate::ensureResources()
         if (try_pbo) {
             pbo.resize(nb_planes);
             for (int i = 0; i < nb_planes; ++i) {
-                qDebug("Init PBO for plane %d", i);
+                QTAV_LOG_DEBUG("Init PBO for plane %d", i);
                 pbo[i] = QOpenGLBuffer(QOpenGLBuffer::PixelUnpackBuffer); //QOpenGLBuffer is shared, must initialize 1 by 1 but not use fill
                 if (!initPBO(i, frame.bytesPerLine(i)*frame.planeHeight(i))) {
-                    qWarning("Failed to init PBO for plane %d", i);
+                    QTAV_LOG_WARNING("Failed to init PBO for plane %d", i);
                     break;
                 }
             }
@@ -1113,14 +1132,17 @@ bool VideoMaterialPrivate::ensureTextures()
     for (int p = 0; p < nb_planes; ++p) {
         GLuint &tex = textures[p];
         if (tex) { // can be 0 if resized to a larger size
-            qDebug("try to delete texture for plane %d (id=%u). can delete: %d", p, tex, owns_texture[tex]);
+            QTAV_LOG_DEBUG("try to delete texture for plane %d (id=%u). can delete: %d",
+                           p,
+                           tex,
+                           owns_texture[tex]);
             if (owns_texture[tex])
                 DYGL(glDeleteTextures(1, &tex));
             owns_texture.remove(tex);
             tex = 0;
         }
         if (!tex) {
-            qDebug("creating texture for plane %d", p);
+            QTAV_LOG_DEBUG("creating texture for plane %d", p);
             GLuint* handle = (GLuint*)frame.createInteropHandle(&tex, GLTextureSurface, p); // take the ownership
             if (handle) {
                 tex = *handle;
@@ -1130,7 +1152,7 @@ bool VideoMaterialPrivate::ensureTextures()
                 owns_texture[tex] = true;
                 initTexture(tex, internal_format[p], data_format[p], data_type[p], texture_size[p].width(), texture_size[p].height());
             }
-            qDebug("texture for plane %d is created (id=%u)", p, tex);
+            QTAV_LOG_DEBUG("texture for plane %d is created (id=%u)", p, tex);
         }
     }
     init_textures_required = false;

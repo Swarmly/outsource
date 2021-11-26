@@ -141,6 +141,15 @@ bool VideoFilter::installTo(AVOutput *output)
     return output->installFilter(this);
 }
 
+VideoFilter::~VideoFilter()
+{
+    DPTR_D(VideoFilter);
+    if (d.context) {
+        delete d.context;
+        d.context = nullptr;
+    }
+}
+
 bool VideoFilter::prepareContext(VideoFilterContext *&ctx, Statistics *statistics, VideoFrame *frame)
 {
     DPTR_D(VideoFilter);

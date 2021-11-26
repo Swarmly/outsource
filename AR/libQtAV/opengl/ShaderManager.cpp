@@ -32,7 +32,9 @@ VideoShader* ShaderManager::prepareMaterial(VideoMaterial *material, qint32 mate
     VideoShader *shader = d->shader_cache.value(type, 0);
     if (shader)
         return shader;
-    qDebug() << QString("[ShaderManager] cache a new shader material type(%1): %2").arg(type).arg(VideoMaterial::typeName(type));
+    QTAV_LOG_DEBUG(QString("[ShaderManager] cache a new shader material type(%1): %2")
+                       .arg(type)
+                       .arg(VideoMaterial::typeName(type)));
     shader = material->createShader();
     shader->initialize();
     d->shader_cache[type] = shader;

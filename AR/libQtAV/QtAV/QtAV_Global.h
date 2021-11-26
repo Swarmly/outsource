@@ -24,10 +24,13 @@
 #define QTAV_GLOBAL_H
 
 #include <stdarg.h>
-#include <QtCore/QMetaType>
-#include <QtCore/QByteArray> //QByteArrayLiteral check
-#include <QtCore/qglobal.h>
 #include <QtAV/dptr.h>
+#include <QtCore/QByteArray> //QByteArrayLiteral check
+#include <QtCore/QMetaType>
+#include <QtCore/qglobal.h>
+
+#define QTAV_LOG_DEBUG(...)
+#define QTAV_LOG_WARNING(...)
 
 #ifdef BUILD_QTAV_STATIC
 #define Q_AV_EXPORT

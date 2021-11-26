@@ -20,12 +20,13 @@
 ******************************************************************************/
 
 #include "QtAVWidgets/WidgetRenderer.h"
+#include "QtAV/Filter.h"
 #include "QtAV/private/QPainterRenderer_p.h"
+#include <QApplication>
+#include <QDebug>
+#include <QResizeEvent>
 #include <QtGui/QFont>
 #include <QtGui/QPainter>
-#include <QApplication>
-#include <QResizeEvent>
-#include "QtAV/Filter.h"
 
 namespace QtAV {
 class WidgetRendererPrivate : public QPainterRendererPrivate
@@ -99,11 +100,17 @@ void WidgetRenderer::resizeEvent(QResizeEvent *e)
 
 void WidgetRenderer::paintEvent(QPaintEvent *)
 {
-    DPTR_D(WidgetRenderer);
-    d.painter->begin(this); //Widget painting can only begin as a result of a paintEvent
-    handlePaintEvent();
-    if (d.painter->isActive())
-        d.painter->end();
+    try {
+        DPTR_D(WidgetRenderer);
+        d.painter->begin(this); //Widget painting can only begin as a result of a paintEvent
+        handlePaintEvent();
+        if (d.painter->isActive())
+            d.painter->end();
+    } catch (std::exception &e) {
+        qCritical() << "Exception catched in QTAV: " << __FUNCTION__ << e.what();
+    } catch (...) {
+        qCritical() << "UNKNOWN Exception catched in QTAV: " << __FUNCTION__;
+    }
 }
 
 bool WidgetRenderer::onSetOrientation(int value)

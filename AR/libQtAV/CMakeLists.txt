@@ -554,6 +554,17 @@ set(COMPONENT_NAME_DEV ${PROJECT_NAME}-dev)
 
 set(COMPONENT_CONFIG_NAME ${COMPONENT_NAME}Config)
 
+if (HAVE_3D)
+   # link the qt3d libraries
+   target_link_libraries(${PROJECT_NAME}
+           PUBLIC
+           Qt5::3DCore
+           Qt5::3DExtras
+           Qt5::3DRender
+           Qt5::3DInput
+   )
+endif()
+
 # install libs
 install(
         TARGETS ${PROJECT_NAME}

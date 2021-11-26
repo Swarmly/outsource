@@ -54,7 +54,13 @@ void OpenGLWindowRenderer::initializeGL()
 
 void OpenGLWindowRenderer::paintGL()
 {
-    onPaintGL();
+    try {
+        onPaintGL();
+    } catch (std::exception &e) {
+        qCritical() << "Exception catched in QTAV: " << __FUNCTION__ << e.what();
+    } catch (...) {
+        qCritical() << "UNKNOWN Exception catched in QTAV: " << __FUNCTION__;
+    }
 }
 
 void OpenGLWindowRenderer::resizeGL(int w, int h)

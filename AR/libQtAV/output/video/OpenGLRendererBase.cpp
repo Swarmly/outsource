@@ -90,42 +90,60 @@ void OpenGLRendererBase::drawBackground()
 
 void OpenGLRendererBase::drawFrame()
 {
-    DPTR_D(OpenGLRendererBase);
-    QRect roi = realROI();
-    //d.glv.render(QRectF(-1, 1, 2, -2), roi, d.matrix);
-    // QRectF() means the whole viewport
-    if (d.frame_changed) {
-        d.glv.setCurrentFrame(d.video_frame);
-        d.frame_changed = false;
+    try {
+        DPTR_D(OpenGLRendererBase);
+        QRect roi = realROI();
+        //d.glv.render(QRectF(-1, 1, 2, -2), roi, d.matrix);
+        // QRectF() means the whole viewport
+        if (d.frame_changed) {
+            d.glv.setCurrentFrame(d.video_frame);
+            d.frame_changed = false;
+        }
+        d.glv.render(QRectF(), roi, d.matrix);
+    } catch (std::exception &e) {
+        qCritical() << "Exception catched in QTAV: " << __FUNCTION__ << e.what();
+    } catch (...) {
+        qCritical() << "UNKNOWN Exception catched in QTAV: " << __FUNCTION__;
     }
-    d.glv.render(QRectF(), roi, d.matrix);
 }
 
 void OpenGLRendererBase::onInitializeGL()
 {
-    DPTR_D(OpenGLRendererBase);
-    //makeCurrent();
+    try {
+        DPTR_D(OpenGLRendererBase);
+        //makeCurrent();
 #if QT_VERSION >= QT_VERSION_CHECK(4, 8, 0)
     initializeOpenGLFunctions();
 #endif
     QOpenGLContext *ctx = const_cast<QOpenGLContext*>(QOpenGLContext::currentContext()); //qt4 returns const
     d.glv.setOpenGLContext(ctx);
+    } catch (std::exception &e) {
+        qCritical() << "Exception catched in QTAV: " << __FUNCTION__ << e.what();
+    } catch (...) {
+        qCritical() << "UNKNOWN Exception catched in QTAV: " << __FUNCTION__;
+    }
 }
 
 void OpenGLRendererBase::onPaintGL()
 {
-    DPTR_D(OpenGLRendererBase);
-    /* we can mix gl and qpainter.
+    try {
+        DPTR_D(OpenGLRendererBase);
+        /* we can mix gl and qpainter.
      * QPainter painter(this);
      * painter.beginNativePainting();
      * gl functions...
      * painter.endNativePainting();
      * swapBuffers();
      */
-    handlePaintEvent();
-    //context()->swapBuffers(this);
-    if (d.painter && d.painter->isActive())
-        d.painter->end();
+        handlePaintEvent();
+        //context()->swapBuffers(this);
+        if (d.painter && d.painter->isActive())
+            d.painter->end();
+    } catch (std::exception &e) {
+        qCritical() << "Exception catched in QTAV: " << __FUNCTION__ << e.what();
+    } catch (...) {
+        qCritical() << "UNKNOWN Exception catched in QTAV: " << __FUNCTION__;
+    }
 }
 
 void OpenGLRendererBase::onResizeGL(int w, int h)

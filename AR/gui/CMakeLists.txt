@@ -59,7 +59,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets ${FFMPEG_LIBRARIES})
-set(target_gcs_dependencies Qt5::Widgets QtAV QtAVWidgets)
+set(target_gcs_dependencies Qt5::Widgets hermes-gui QtAV QtAVWidgets)
 target_link_libraries(
         ${PROJECT_NAME} PRIVATE ${target_gcs_dependencies} ${FFMPEG_LIBRARIES}
 )

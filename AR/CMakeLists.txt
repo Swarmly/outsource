@@ -158,7 +158,7 @@ get_target_property(qmake Qt5::OpenGL LOCATION)
 add_subdirectory("libQtAVWidgets")
 
 # Add as the last
-#add_subdirectory("hermes-gui")
+add_subdirectory("hermes-gui")
 #add_subdirectory("hermes-gcs")
 add_subdirectory("gui")
 

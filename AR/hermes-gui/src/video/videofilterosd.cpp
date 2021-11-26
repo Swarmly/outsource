@@ -1,5 +1,5 @@
 #include "video/videofilterosd.h"
-#include "commonmavlinkutils.h"
+//#include "commonmavlinkutils.h"
 #include <cmath>
 #include <QDateTime>
 #include <QDebug>
@@ -1279,10 +1279,10 @@ void VideoFilterOSD::onMavlinkMessage(const QMap<int, mavlink_message_t> &messag
 {
     if (messages.contains(MAVLINK_MSG_ID_HEARTBEAT)) {
         auto &msg = messages[MAVLINK_MSG_ID_HEARTBEAT];
-        if (isItDrone(&msg)) {
-            m_targetSysID = msg.sysid;
-            m_targetCompID = msg.compid;
-        }
+//        if (isItDrone(&msg)) {
+//            m_targetSysID = msg.sysid;
+//            m_targetCompID = msg.compid;
+//        }
     }
     if (messages.contains(MAVLINK_MSG_ID_ATTITUDE)) {
         auto &msg = messages[MAVLINK_MSG_ID_ATTITUDE];

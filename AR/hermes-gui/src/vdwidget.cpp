@@ -1,7 +1,7 @@
 #include "vdwidget.h"
 #include "commoncommands.h"
-#include "configmanager.h"
-#include "gtuplugin-av/include/ffpackagedatasample.h"
+//#include "configmanager.h"
+//#include "gtuplugin-av/include/ffpackagedatasample.h"
 #include "ui_vdwidget.h"
 #include "vdwidget.h"
 #include "video/videofiltergmb.h"
@@ -93,16 +93,16 @@ void VdWidget::onInitProps(const QJsonObject &props)
     renderName = GetJsonValue(props, "RENDER").toString(renderName);
     createVideoRender(renderName);
 
-    bool showICEBool = GTUCore::Impl().getConfigmanager()->GetValue(showICE, true).toBool();
-    bool showOSDBool = GTUCore::Impl().getConfigmanager()->GetValue(showOSD, true).toBool();
-    bool showRFBool = GTUCore::Impl().getConfigmanager()->GetValue(showRF, true).toBool();
-    bool showGimbalOSDBool
-        = GTUCore::Impl().getConfigmanager()->GetValue(showGimbalOSD, true).toBool();
+//    bool showICEBool = GTUCore::Impl().getConfigmanager()->GetValue(showICE, true).toBool();
+//    bool showOSDBool = GTUCore::Impl().getConfigmanager()->GetValue(showOSD, true).toBool();
+//    bool showRFBool = GTUCore::Impl().getConfigmanager()->GetValue(showRF, true).toBool();
+//    bool showGimbalOSDBool
+//        = GTUCore::Impl().getConfigmanager()->GetValue(showGimbalOSD, true).toBool();
 
-    m_filterOSD->setEnabled(showOSDBool);
-    m_filterRF->setEnabled(showRFBool);
-    m_filterGMB->setEnabled(showGimbalOSDBool);
-    m_filterICE->setEnabled(showICEBool);
+    m_filterOSD->setEnabled(true);
+    m_filterRF->setEnabled(true);
+    m_filterGMB->setEnabled(true);
+    m_filterICE->setEnabled(true);
     m_statReceived.SetNewTimeout(2500);
     m_dataReceived.SetNewTimeout(2500);
     m_statReceived.setElapsed();
@@ -124,8 +124,8 @@ void VdWidget::createVideoRender(QString render)
         }
         LOG_INFO_EXT << "Ask to create render: " << render;
 
-        m_renderName
-            = GTUCore::Impl().getConfigmanager()->GetValue(renderNameInCFG, render).toString();
+//        m_renderName
+//            = GTUCore::Impl().getConfigmanager()->GetValue(renderNameInCFG, render).toString();
         LOG_INFO_EXT << "Will create render from the config: " << m_renderName;
 
         m_videoRenderer = QtAV::VideoRenderer::create(renderName2RenderId(m_renderName));
@@ -133,7 +133,7 @@ void VdWidget::createVideoRender(QString render)
             errorRender = m_renderName;
             m_renderName = "GL2";
             m_videoRenderer = QtAV::VideoRenderer::create(renderName2RenderId(m_renderName));
-            GTUCore::Impl().getConfigmanager()->PutValue(renderNameInCFG, m_renderName);
+           // GTUCore::Impl().getConfigmanager()->PutValue(renderNameInCFG, m_renderName);
             isError = true;
         }
 
@@ -213,19 +213,19 @@ void VdWidget::keyPressEvent(QKeyEvent *event)
 {
     if ((event->key() == Qt::Key_1) && event->modifiers() == Qt::AltModifier) {
         m_filterOSD->setEnabled(!m_filterOSD->isEnabled());
-        GTUCore::Impl().getConfigmanager()->PutValue(showOSD, m_filterOSD->isEnabled());
+       // GTUCore::Impl().getConfigmanager()->PutValue(showOSD, m_filterOSD->isEnabled());
     }
     if ((event->key() == Qt::Key_2) && event->modifiers() == Qt::AltModifier) {
         m_filterGMB->setEnabled(!m_filterGMB->isEnabled());
-        GTUCore::Impl().getConfigmanager()->PutValue(showGimbalOSD, m_filterGMB->isEnabled());
+       // GTUCore::Impl().getConfigmanager()->PutValue(showGimbalOSD, m_filterGMB->isEnabled());
     }
     if ((event->key() == Qt::Key_3) && event->modifiers() == Qt::AltModifier) {
         m_filterRF->setEnabled(!m_filterRF->isEnabled());
-        GTUCore::Impl().getConfigmanager()->PutValue(showRF, m_filterRF->isEnabled());
+       // GTUCore::Impl().getConfigmanager()->PutValue(showRF, m_filterRF->isEnabled());
     }
     if ((event->key() == Qt::Key_4) && event->modifiers() == Qt::AltModifier) {
         m_filterICE->setEnabled(!m_filterICE->isEnabled());
-        GTUCore::Impl().getConfigmanager()->PutValue(showICE, m_filterICE->isEnabled());
+        //GTUCore::Impl().getConfigmanager()->PutValue(showICE, m_filterICE->isEnabled());
     }
 
     if (event->key() == Qt::Key_O) {
@@ -233,24 +233,24 @@ void VdWidget::keyPressEvent(QKeyEvent *event)
         m_filterGMB->setEnabled(false);
         m_filterRF->setEnabled(false);
         m_filterICE->setEnabled(false);
-        GTUCore::Impl().getConfigmanager()->PutValue(showOSD, m_filterOSD->isEnabled());
-        GTUCore::Impl().getConfigmanager()->PutValue(showGimbalOSD, m_filterGMB->isEnabled());
-        GTUCore::Impl().getConfigmanager()->PutValue(showRF, m_filterRF->isEnabled());
-        GTUCore::Impl().getConfigmanager()->PutValue(showICE, m_filterICE->isEnabled());
+//        GTUCore::Impl().getConfigmanager()->PutValue(showOSD, m_filterOSD->isEnabled());
+//        GTUCore::Impl().getConfigmanager()->PutValue(showGimbalOSD, m_filterGMB->isEnabled());
+//        GTUCore::Impl().getConfigmanager()->PutValue(showRF, m_filterRF->isEnabled());
+//        GTUCore::Impl().getConfigmanager()->PutValue(showICE, m_filterICE->isEnabled());
    }
     BaseGuiWidget::keyPressEvent(event);
 }
 
 void VdWidget::onCommand(const QString &command, const boost::any &params)
 {
-    if (cmd_rx_stat == command) {
-        signalStatus status;
-        if (!get_prop_from_any(params, status)) {
-            LOG_ERROR_EXT << "Can't extract parameters for command: " << command;
-        } else {
-            m_filterRF->setRxStat(status);
-        }
-    }
+//    if (cmd_rx_stat == command) {
+//        signalStatus status;
+//        if (!get_prop_from_any(params, status)) {
+//            LOG_ERROR_EXT << "Can't extract parameters for command: " << command;
+//        } else {
+//            m_filterRF->setRxStat(status);
+//        }
+//    }
 }
 
 void VdWidget::addFilter(GTUSharedPTR<BaseOSDVideoFilter> filter)
@@ -276,41 +276,41 @@ void VdWidget::onMavlinkMessage(const std::list<mavlink_message_t> &outMessages)
 
 void VdWidget::onDataFrame(const DataSampleCSPtr &data)
 {
-    if (CompareString(data->format(), "RGB") || CompareString(data->format(), "RGB24")
-        || CompareString(data->format(), "BGR") || CompareString(data->format(), "BGR24")
-        || CompareString(data->format(), "GRAY") || CompareString(data->format(), "GRAY8")
-        || CompareString(data->format(), "GRAY16") || CompareString(data->format(), "GRAY16LE")
-        || CompareString(data->format(), "GRAY16BE") || CompareString(data->format(), "yuv420p")
-        || CompareString(data->format(), "yuvj420p")) {
-        QSharedPointer<FFPackageDataSample const> dataPtr
-            = data.dynamicCast<const FFPackageDataSample>();
-        // m_videoRenderer;
+//    if (CompareString(data->format(), "RGB") || CompareString(data->format(), "RGB24")
+//        || CompareString(data->format(), "BGR") || CompareString(data->format(), "BGR24")
+//        || CompareString(data->format(), "GRAY") || CompareString(data->format(), "GRAY8")
+//        || CompareString(data->format(), "GRAY16") || CompareString(data->format(), "GRAY16LE")
+//        || CompareString(data->format(), "GRAY16BE") || CompareString(data->format(), "yuv420p")
+//        || CompareString(data->format(), "yuvj420p")) {
+//        QSharedPointer<FFPackageDataSample const> dataPtr
+//            = data.dynamicCast<const FFPackageDataSample>();
+//        // m_videoRenderer;
 
-        if (dataPtr && dataPtr->GetFrame()) {
-            QSharedPointer<AVFrame> frame = dataPtr->GetFrame();
+//        if (dataPtr && dataPtr->GetFrame()) {
+//            QSharedPointer<AVFrame> frame = dataPtr->GetFrame();
 
-            using namespace QtAV;
-            QSharedPointer<QtAV::VideoFrame> avFrame(
-                new QtAV::VideoFrame(frame->width,
-                                     frame->height,
-                                     QtAV::VideoFormat((int) frame->format)));
+//            using namespace QtAV;
+//            QSharedPointer<QtAV::VideoFrame> avFrame(
+//                new QtAV::VideoFrame(frame->width,
+//                                     frame->height,
+//                                     QtAV::VideoFormat((int) frame->format)));
 
-            avFrame->setBits(frame->data);
-            avFrame->setBytesPerLine(frame->linesize);
-            avFrame->setTimestamp(-1); // in s. what about AVFrame.pts?
-            QMutexLocker locker(&m_renderGuard);
-            m_videoRenderer->receive(*avFrame.get());
-            m_dataReceived.RestartTimer();
-        }
-    } else if (data->format() == typeMAV2) {
-        onMetaInfo(data->metaInfo());
-    }
+//            avFrame->setBits(frame->data);
+//            avFrame->setBytesPerLine(frame->linesize);
+//            avFrame->setTimestamp(-1); // in s. what about AVFrame.pts?
+//            QMutexLocker locker(&m_renderGuard);
+//            m_videoRenderer->receive(*avFrame.get());
+//            m_dataReceived.RestartTimer();
+//        }
+//    } else if (data->format() == typeMAV2) {
+//        onMetaInfo(data->metaInfo());
+//    }
 }
 
 void VdWidget::onMenuClicked(QString value)
 {
     createVideoRender(value);
-    GTUCore::Impl().getConfigmanager()->PutValue(renderNameInCFG, value);
+    //GTUCore::Impl().getConfigmanager()->PutValue(renderNameInCFG, value);
 }
 
 void VdWidget::addMenuItem(QMenu &menu, QString name)

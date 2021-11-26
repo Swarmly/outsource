@@ -1,26 +1,27 @@
 #pragma once
 #include "VideoRenderer.h"
 #include "gui_tools.h"
-#include "ibasesensor.h"
+#include "datasample.h"
+//#include "ibasesensor.h"
 #include "video/videofilterbase.h"
 
-class HERMESGUI_EXPORT Hermes : public IBaseSensor
+class HERMESGUI_EXPORT Hermes : public QObject
 {
     Q_OBJECT
 public:
     static Hermes *getImpl(QObject *parent = nullptr);
     Hermes(QObject *parent = nullptr);
     ~Hermes();
-    const QString &GetSensorType() const override;
+    const QString &GetSensorType() const ;
     static const QString &MyName();
-    void WriteSample(const DataSampleCSPtr &data) override;
-    void onCommand(const QString &command, const boost::any &params) override;
-    void Init(const QJsonObject &props) override;
-    void onEventDown(const QString &event, const boost::any &param, EVDownData &visited) override;
-    void Stop() override;
+    void WriteSample(const DataSampleCSPtr &data) ;
+    void onCommand(const QString &command, const boost::any &params) ;
+    void Init(const QJsonObject &props) ;
+    //void onEventDown(const QString &event, const boost::any &param, EVDownData &visited) ;
+    void Stop();
 
     static GTUSharedPTR<Hermes> getHMSensor(QObject *parent = nullptr);
-    static GTUSharedPTR<IBaseSensor> getISensor(QObject *parent = nullptr);
+    //static GTUSharedPTR<IBaseSensor> getISensor(QObject *parent = nullptr);
 
 signals:
     void txtFrame(QString str, QString name);

@@ -3,17 +3,17 @@
 #include "commoncommands.h"
 #include "coreutils.h"
 #include "datasample.h"
-#include "gtucore.h"
-#include "variablemanager.h"
+//#include "gtucore.h"
+//#include "variablemanager.h"
 
 static const QString sensorName("hermes");
 //static GTUSharedPTR<Hermes> g_sensorPtr;
 
-static IBaseSensorSPtr createSensor(QObject *parent)
-{
-    return Hermes::getHMSensor(parent);
-}
-static bool result = GTUCore::Impl().registerPlugin(sensorName, &createSensor);
+//static IBaseSensorSPtr createSensor(QObject *parent)
+//{
+//    return Hermes::getHMSensor(parent);
+//}
+//static bool result = GTUCore::Impl().registerPlugin(sensorName, &createSensor);
 
 Q_DECLARE_METATYPE(mavlink_message_t);
 Q_DECLARE_METATYPE(mavlink_message_t *);
@@ -28,9 +28,9 @@ GTUSharedPTR<Hermes> Hermes::getHMSensor(QObject *parent)
 }
 
 Hermes::Hermes(QObject *parent)
-    : IBaseSensor(parent)
+    : QObject(parent)
 {
-    m_name = sensorName;
+    //m_name = sensorName;
     qRegisterMetaType<mavlink_message_t>();
     qRegisterMetaType<mavlink_message_t *>();
     qRegisterMetaType<std::list<mavlink_message_t>>();
@@ -47,7 +47,7 @@ Hermes::~Hermes()
 
 void Hermes::Stop()
 {
-    IBaseSensor::Stop();
+    //IBaseSensor::Stop();
 }
 
 const QString &Hermes::GetSensorType() const
@@ -65,15 +65,15 @@ Hermes *Hermes::getImpl(QObject *parent)
     return Hermes::getHMSensor(parent).get();
 }
 
-GTUSharedPTR<IBaseSensor> Hermes::getISensor(QObject *parent)
-{
-    return Hermes::getHMSensor(parent);
-}
+//GTUSharedPTR<IBaseSensor> Hermes::getISensor(QObject *parent)
+//{
+//    return Hermes::getHMSensor(parent);
+//}
 
-void Hermes::onEventDown(const QString &event, const boost::any &param, EVDownData & /*producer*/)
-{
-    eventDown(event, param);
-}
+//void Hermes::onEventDown(const QString &event, const boost::any &param, EVDownData & /*producer*/)
+//{
+//    eventDown(event, param);
+//}
 
 void Hermes::WriteSample(const DataSampleCSPtr &data)
 {
@@ -104,22 +104,22 @@ void Hermes::onLogMessage(QString str, QString name)
 
 void Hermes::commandReSend(const QString &command, const boost::any &params)
 {
-    oneShotCMD(command, params);
+   // oneShotCMD(command, params);
 }
 
 void Hermes::eventUpReSend(const QString &event, const boost::any &params)
 {
-    onEventUp(event, params);
+    //onEventUp(event, params);
 }
 
 void Hermes::onCommand(const QString &command, const boost::any &params)
 {
-    IBaseSensor::onCommand(command, params);
+   // IBaseSensor::onCommand(command, params);
     commandCame(command, params);
 }
 
 void Hermes::Init(const QJsonObject &props)
 {
-    IBaseSensor::Init(props);
+    //IBaseSensor::Init(props);
     initProps(props);
 }

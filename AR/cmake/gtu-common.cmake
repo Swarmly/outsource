@@ -276,9 +276,9 @@ function(GTU_DEFINE_LIB)
     # This makes the project importable from the build directory
     export(TARGETS ${PROJECT_NAME} FILE cmake/${COMPONENT_NAME_DEV}Config.cmake)
 
-    if (NOT ${PROJECT_NAME} STREQUAL gtu-core)
-        target_link_libraries(${PROJECT_NAME} PRIVATE gtu-core)
-    endif ()
+#    if (NOT ${PROJECT_NAME} STREQUAL gtu-core)
+#        target_link_libraries(${PROJECT_NAME} PRIVATE gtu-core)
+#    endif ()
 
     #One of the solutions there it is copy files. But it produces recompilation depended projects every time.
     #so lets create symlink

@@ -8,6 +8,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../libQtAVWidgets/QtAVWidgets)
 
 find_package(FFMPEG COMPONENTS avformat avutil avdevice avcodec swscale swresample REQUIRED)
 #find_package(OpenGL REQUIRED)
+add_definitions(-DGTU_CORE_LIBRARY)
+add_definitions(-DHERMES_GUI_LIBRARY)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 

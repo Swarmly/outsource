@@ -1,7 +1,8 @@
 #pragma once
-#include "gtucore.h"
+//#include "gtucore.h"
 #include <QMutex>
 #include <QPainter>
+#include <boost/any.hpp>
 struct AVFrame;
 
 namespace mavlink {};

@@ -1,11 +1,13 @@
-#include "testar.h"
-
+#include "groundstation.h"
+#include "hermes.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    TestAR w;
+    GroundStation w;
+    QJsonObject props;
+    Hermes::getHMSensor()->Init(props);
     w.show();
     return a.exec();
 }

@@ -21,9 +21,9 @@ endif()
 
 set(PROJECT_SOURCES
         main.cpp
-        testar.cpp
-        testar.h
-        testar.ui
+        groundstation.cpp
+        groundstation.h
+        groundstation.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

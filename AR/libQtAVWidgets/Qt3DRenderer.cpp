@@ -55,7 +55,7 @@ public:
         , m_depthTexture(new Qt3DRender::QTexture2DMultisample)
         , m_initialized(false)
     {
-   
+
     }
     void init()
     {
@@ -98,32 +98,32 @@ public:
 
         m_shaderProgram.reset(new QOpenGLShaderProgram);
         m_shaderProgram
-            ->addShaderFromSourceCode(QOpenGLShader::Vertex,
-                                      "#version 150\n"
-                                      "in highp vec3 vertex;\n"
-                                      "in mediump vec2 texCoord;\n"
-                                      "out mediump vec2 texc;\n"
-                                      "uniform mediump mat4 matrix;\n"
-                                      "void main(void)\n"
-                                      "{\n"
-                                      "        gl_Position = matrix * vec4(vertex, 1.0);\n"
-                                      "        texc = texCoord;\n"
-                                      "}\n");
+                ->addShaderFromSourceCode(QOpenGLShader::Vertex,
+                                          "#version 150\n"
+                                          "in highp vec3 vertex;\n"
+                                          "in mediump vec2 texCoord;\n"
+                                          "out mediump vec2 texc;\n"
+                                          "uniform mediump mat4 matrix;\n"
+                                          "void main(void)\n"
+                                          "{\n"
+                                          "        gl_Position = matrix * vec4(vertex, 1.0);\n"
+                                          "        texc = texCoord;\n"
+                                          "}\n");
         m_shaderProgram
-            ->addShaderFromSourceCode(QOpenGLShader::Fragment,
-                                      "#version 150\n"
-                                      "uniform sampler2DMS texture;\n"
-                                      "in mediump vec2 texc;\n"
-                                      "uniform int samples;\n"
-                                      "void main(void)\n"
-                                      "{\n"
-                                      "   ivec2 tc = ivec2(floor(textureSize(texture) * texc));\n"
-                                      "   vec4 color = vec4(0.0);\n"
-                                      "   for(int i = 0; i < samples; i++) {\n"
-                                      "       color += texelFetch(texture, tc, i);\n"
-                                      "   }\n"
-                                      "   gl_FragColor = color / float(samples);\n"
-                                      "}\n");
+                ->addShaderFromSourceCode(QOpenGLShader::Fragment,
+                                          "#version 150\n"
+                                          "uniform sampler2DMS texture;\n"
+                                          "in mediump vec2 texc;\n"
+                                          "uniform int samples;\n"
+                                          "void main(void)\n"
+                                          "{\n"
+                                          "   ivec2 tc = ivec2(floor(textureSize(texture) * texc));\n"
+                                          "   vec4 color = vec4(0.0);\n"
+                                          "   for(int i = 0; i < samples; i++) {\n"
+                                          "       color += texelFetch(texture, tc, i);\n"
+                                          "   }\n"
+                                          "   gl_FragColor = color / float(samples);\n"
+                                          "}\n");
         m_shaderProgram->bindAttributeLocation("vertex", m_vertexAttributeLoc);
         m_shaderProgram->bindAttributeLocation("texCoord", m_vertexAttributeLoc);
         m_shaderProgram->link();
@@ -289,34 +289,34 @@ void Qt3DRenderer::initializeGL()
 void Qt3DRenderer::paintGL()
 {
     //OpenGLRendererBasePrivate &ptrOpenGlBase = dptr.pri<OpenGLRendererBasePrivate>();
-
     transform->setRotationX(transform->rotationX() + 1);
     onPaintGL();
-    //if (1)
-    // {
-    DPTR_D(Qt3DRenderer);
-
-    glClearColor(1.0, 1.0, 1.0, 1.0);
-    glDisable(GL_BLEND);
-    glEnable(GL_MULTISAMPLE);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    d.m_shaderProgram->bind();
+    if (true)
     {
-        QMatrix4x4 m;
-        m.ortho(0, 1, 1, 0, 1.0f, 3.0f);
-        m.translate(0.0f, 0.0f, -2.0f);
+        DPTR_D(Qt3DRenderer);
 
-        QOpenGLVertexArrayObject::Binder vaoBinder(&d.m_vao);
+        glClearColor(1.0, 1.0, 1.0, 1.0);
+        glDisable(GL_BLEND);
+        glEnable(GL_MULTISAMPLE);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        d.m_shaderProgram->setUniformValue("matrix", m);
-        glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, d.m_colorTexture->handle().toUInt());
-        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+        d.m_shaderProgram->bind();
+        {
+            QMatrix4x4 m;
+            m.ortho(0, 1, 1, 0, 1.0f, 3.0f);
+            m.translate(0.0f, 0.0f, -2.0f);
+
+            QOpenGLVertexArrayObject::Binder vaoBinder(&d.m_vao);
+
+            d.m_shaderProgram->setUniformValue("matrix", m);
+            glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, d.m_colorTexture->handle().toUInt());
+            glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+        }
+        d.m_shaderProgram->release();
+        // onPaintGL();
+    } else {
+        onPaintGL();
     }
-    d.m_shaderProgram->release();
-    // onPaintGL();
-    //    } else {
-    //    }
     //Qt3DWidget::paintGL();
 }
 

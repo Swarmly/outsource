@@ -44,6 +44,8 @@ int renderName2RenderId(QString renderName)
         return QtAV::VideoRendererId_GLWidget2;
     } else if (renderName.compare("OpenGL", Qt::CaseInsensitive) == 0) {
         return QtAV::VideoRendererId_OpenGLWidget;
+    }else if (renderName.compare("QT3D", Qt::CaseInsensitive) == 0) {
+        return QtAV::VideoRendererId_Qt3DWidget;
     }
     qCritical() << "Unsupported render, supported only: Widget, GraphicsItem, GL, GDI, DX2D, XV, "
                    "X11, GL2, OpenGL.";
@@ -53,6 +55,7 @@ int renderName2RenderId(QString renderName)
 VdWidget::VdWidget(QWidget *parent)
     : BaseGuiWidget(parent)
     , ui(new Ui::VdWidget)
+    , m_renderName("QT3D")
 {
     //this->setParent(parent);
     ui->setupUi(this);

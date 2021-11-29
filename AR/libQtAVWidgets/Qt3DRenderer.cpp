@@ -124,6 +124,8 @@ public:
                                           "   for(int i = 0; i < samples; i++) {\n"
                                           "       color += texelFetch(texture, tc, i);\n"
                                           "   }\n"
+                                          "   if(color.a == 0)\n"
+                                          "       discard;\n"
                                           "   gl_FragColor = color / float(samples);\n"
                                           "}\n");
         m_shaderProgram->bindAttributeLocation("vertex", m_vertexAttributeLoc);
@@ -213,7 +215,7 @@ Qt3DRenderer::Qt3DRenderer(QWidget *parent, Qt::WindowFlags f)
 
     // Create a color texture to render into.
     d.m_colorTexture->setSize(width(), height());
-    d.m_colorTexture->setFormat(Qt3DRender::QAbstractTexture::RGB8_UNorm);
+    d.m_colorTexture->setFormat(Qt3DRender::QAbstractTexture::RGBA8_UNorm);
     d.m_colorTexture->setMinificationFilter(Qt3DRender::QAbstractTexture::Linear);
     d.m_colorTexture->setMagnificationFilter(Qt3DRender::QAbstractTexture::Linear);
 
@@ -274,7 +276,7 @@ Qt3DRenderer::Qt3DRenderer(QWidget *parent, Qt::WindowFlags f)
 
     forwardRenderer = new Qt3DExtras::QForwardRenderer;
     forwardRenderer->setCamera(camera());
-    forwardRenderer->setClearColor(Qt::gray);
+    forwardRenderer->setClearColor(QColor(0,0,0,0));
     setActiveFrameGraph(forwardRenderer);
 
     setRootEntity(entity);
@@ -298,10 +300,11 @@ void Qt3DRenderer::paintGL()
     {
         DPTR_D(Qt3DRenderer);
 
-        glClearColor(1.0, 1.0, 1.0, 1.0);
-        glDisable(GL_BLEND);
+        //glClearColor(1.0, 1.0, 1.0, 1.0);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_MULTISAMPLE);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         d.m_shaderProgram->bind();
         {
@@ -316,7 +319,7 @@ void Qt3DRenderer::paintGL()
             glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
         }
         d.m_shaderProgram->release();
-        // onPaintGL();
+        //onPaintGL();
     }
 }
 

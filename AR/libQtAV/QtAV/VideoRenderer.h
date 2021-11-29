@@ -214,6 +214,7 @@ protected:
     // TODO: parameter VideoFrame
     virtual void drawFrame() = 0; //You MUST reimplement this to display a frame. Other draw functions are not essential
     virtual void handlePaintEvent(); //has default. User don't have to implement it
+    virtual void handlePaintFiltersEvent();
     virtual void updateUi(); // by default post an UpdateRequest event for window and UpdateLater event for widget to ensure ui update
 
 private: // property change. used as signals in subclasses. implemented by moc

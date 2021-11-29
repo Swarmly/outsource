@@ -263,7 +263,7 @@ Qt3DRenderer::Qt3DRenderer(QWidget *parent, Qt::WindowFlags f)
     mesh->setRings(100);
     mesh->setSlices(100);
     mesh->setMinorRadius(0.5);
-    mesh->setRadius(1);
+    mesh->setRadius(2);
     material = new Qt3DExtras::QPhongMaterial();
     material->setAmbient("red");
     transform = new Qt3DCore::QTransform();
@@ -321,6 +321,7 @@ void Qt3DRenderer::paintGL()
         d.m_shaderProgram->release();
         //onPaintGL();
     }
+    onPaintGLFilters();
 }
 
 void Qt3DRenderer::resizeGL(int w, int h)

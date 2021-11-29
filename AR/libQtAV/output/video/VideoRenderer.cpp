@@ -520,7 +520,19 @@ void VideoRenderer::handlePaintEvent()
             }
         }
         hanlePendingTasks();
-        //TODO: move to AVOutput::applyFilters() //protected?
+        //end paint. how about QPainter::endNativePainting()?
+    } catch (std::exception &e) {
+        qCritical() << "Exception catched in QTAV: " << __FUNCTION__ << e.what();
+    } catch (...) {
+        qCritical() << "UNKNOWN Exception catched in QTAV: " << __FUNCTION__;
+    }
+}
+
+void VideoRenderer::handlePaintFiltersEvent()
+{
+    DPTR_D(VideoRenderer);
+    d.setupQuality();
+    try {
         if (!d.filters.isEmpty() && d.filter_context && d.statistics) {
             // vo filter will not modify video frame, no lock required
             foreach (Filter *filter, d.filters) {

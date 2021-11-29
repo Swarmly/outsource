@@ -56,6 +56,7 @@ protected:
     virtual void drawFrame() Q_DECL_OVERRIDE;
     void onInitializeGL();
     void onPaintGL();
+    void onPaintGLFilters();
     void onResizeGL(int w, int h);
     void onResizeEvent(int w, int h);
     void onShowEvent();

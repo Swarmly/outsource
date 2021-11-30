@@ -126,9 +126,17 @@ void OpenGLRendererBase::onInitializeGL()
 
 void OpenGLRendererBase::onPaintGL()
 {
+    onPaintGLFrame();
+    onPaintGLFilters();
+}
+
+void OpenGLRendererBase::onPaintGLFrame()
+{
     try {
-        onPaintGLFrame();
-        onPaintGLFilters();
+        DPTR_D(OpenGLRendererBase);
+        handlePaintEvent();
+        if (d.painter && d.painter->isActive())
+            d.painter->end();
     } catch (std::exception &e) {
         qCritical() << "Exception catched in QTAV: " << __FUNCTION__ << e.what();
     } catch (...) {
@@ -136,20 +144,18 @@ void OpenGLRendererBase::onPaintGL()
     }
 }
 
-void OpenGLRendererBase::onPaintGLFrame()
-{
-    DPTR_D(OpenGLRendererBase);
-    handlePaintEvent();
-    if (d.painter && d.painter->isActive())
-        d.painter->end();
-}
-
 void OpenGLRendererBase::onPaintGLFilters()
 {
-    DPTR_D(OpenGLRendererBase);
-    handlePaintFiltersEvent();
-    if (d.painter && d.painter->isActive())
-        d.painter->end();
+    try {
+        DPTR_D(OpenGLRendererBase);
+        handlePaintFiltersEvent();
+        if (d.painter && d.painter->isActive())
+            d.painter->end();
+    } catch (std::exception &e) {
+        qCritical() << "Exception catched in QTAV: " << __FUNCTION__ << e.what();
+    } catch (...) {
+        qCritical() << "UNKNOWN Exception catched in QTAV: " << __FUNCTION__;
+    }
 }
 
 void OpenGLRendererBase::onResizeGL(int w, int h)

@@ -134,7 +134,7 @@ void OpenGLRendererBase::onPaintGLFrame()
 {
     try {
         DPTR_D(OpenGLRendererBase);
-        handlePaintEvent();
+        handlePaintFrameEvent();
         if (d.painter && d.painter->isActive())
             d.painter->end();
     } catch (std::exception &e) {

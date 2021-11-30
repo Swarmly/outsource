@@ -466,6 +466,12 @@ void VideoRenderer::drawBackground()
 
 void VideoRenderer::handlePaintEvent()
 {
+    handlePaintFrameEvent();
+    handlePaintFiltersEvent();
+}
+
+void VideoRenderer::handlePaintFrameEvent()
+{
     DPTR_D(VideoRenderer);
     d.setupQuality();
     try {

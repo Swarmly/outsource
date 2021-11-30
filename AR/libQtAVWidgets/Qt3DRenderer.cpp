@@ -294,7 +294,7 @@ void Qt3DRenderer::paintGL()
 {
     //OpenGLRendererBasePrivate &ptrOpenGlBase = dptr.pri<OpenGLRendererBasePrivate>();
     transform->setRotationX(transform->rotationX() + 1);
-    onPaintGL();
+    onPaintGLFrame();
     //Change something there
     if (renderType)
     {

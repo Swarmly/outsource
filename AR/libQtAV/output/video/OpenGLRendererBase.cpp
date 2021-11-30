@@ -127,18 +127,8 @@ void OpenGLRendererBase::onInitializeGL()
 void OpenGLRendererBase::onPaintGL()
 {
     try {
-        DPTR_D(OpenGLRendererBase);
-        /* we can mix gl and qpainter.
-     * QPainter painter(this);
-     * painter.beginNativePainting();
-     * gl functions...
-     * painter.endNativePainting();
-     * swapBuffers();
-     */
-        handlePaintEvent();
-        //context()->swapBuffers(this);
-        if (d.painter && d.painter->isActive())
-            d.painter->end();
+        onPaintGLFrame();
+        onPaintGLFilters();
     } catch (std::exception &e) {
         qCritical() << "Exception catched in QTAV: " << __FUNCTION__ << e.what();
     } catch (...) {
@@ -146,26 +136,20 @@ void OpenGLRendererBase::onPaintGL()
     }
 }
 
+void OpenGLRendererBase::onPaintGLFrame()
+{
+    DPTR_D(OpenGLRendererBase);
+    handlePaintEvent();
+    if (d.painter && d.painter->isActive())
+        d.painter->end();
+}
+
 void OpenGLRendererBase::onPaintGLFilters()
 {
-    try {
-        DPTR_D(OpenGLRendererBase);
-        /* we can mix gl and qpainter.
-     * QPainter painter(this);
-     * painter.beginNativePainting();
-     * gl functions...
-     * painter.endNativePainting();
-     * swapBuffers();
-     */
-        handlePaintFiltersEvent();
-        //context()->swapBuffers(this);
-        if (d.painter && d.painter->isActive())
-            d.painter->end();
-    } catch (std::exception &e) {
-        qCritical() << "Exception catched in QTAV: " << __FUNCTION__ << e.what();
-    } catch (...) {
-        qCritical() << "UNKNOWN Exception catched in QTAV: " << __FUNCTION__;
-    }
+    DPTR_D(OpenGLRendererBase);
+    handlePaintFiltersEvent();
+    if (d.painter && d.painter->isActive())
+        d.painter->end();
 }
 
 void OpenGLRendererBase::onResizeGL(int w, int h)
